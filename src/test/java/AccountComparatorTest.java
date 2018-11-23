@@ -45,5 +45,7 @@ public class AccountComparatorTest {
 
         String after = new String(b.getBalance().toString());
         Assert.assertTrue("Balance immutable at compare", (before.equals(after)));
+
+        System.out.println(b);
     }
 }

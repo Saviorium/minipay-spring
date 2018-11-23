@@ -48,4 +48,10 @@ public class Account{
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "Аккаунт " + id + ", баланс = " + balance + ' ' + currency + "\n" +
+                "Пользователь " + user;
+    }
 }

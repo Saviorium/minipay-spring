@@ -63,4 +63,10 @@ public class User {
     public int hashCode() {
         return Objects.hash(firstName, lastName, gender, birthday);
     }
+
+    @Override
+    public String toString() {
+        String genderStr = (gender == Gender.MALE) ? "Мужской" : "Женский";
+        return firstName + ' ' + lastName + ", Пол: " + genderStr + ", Дата рождения: " + birthday;
+    }
 }
