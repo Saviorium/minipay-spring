@@ -23,9 +23,6 @@ public class AccountComparatorTest {
         a = new Account(new User("Тест", "Тестовый", Gender.MALE, LocalDate.of(1995,1,1)), Currency.RUB);
         b = new Account(new User("Тест", "Тестовый", Gender.MALE, LocalDate.of(1999, 1, 1)), Currency.EUR);
         c = new Account(new User("Тест", "Тестовый", Gender.MALE, LocalDate.of(1999, 1, 1)), Currency.USD);
-        a.setBalance(1000L);
-        b.setBalance(10L);
-        c.setBalance(10L);
     }
 
     @Test
@@ -33,19 +30,38 @@ public class AccountComparatorTest {
         Account d = a;
         Account[] accounts = {a, b, c, d};
 
+        a.setBalance(1000L);
+        b.setBalance(10L);
+        c.setBalance(10L);
+
         Assert.assertNotEquals(a, b);
         Assert.assertEquals(a, d);
 
         Comparator<Account> comparator = new AccountComparator(exchangeRate);
 
-        String before = new String(b.getBalance().toString());
+        String before = b.getBalance().toString();
 
         Arrays.sort(accounts, comparator);
         Assert.assertTrue("Sorted not properly", accounts[0] == c);
 
-        String after = new String(b.getBalance().toString());
+        String after = b.getBalance().toString();
         Assert.assertTrue("Balance immutable at compare", (before.equals(after)));
 
         System.out.println(b);
+    }
+
+    @Test
+    public void testExchangeRate() {
+        a.setBalance(exchangeRate.get(b.getCurrency()).multiply(new BigDecimal(100L)));
+        b.setBalance(100L);
+
+        Comparator<Account> comparator = new AccountComparator(exchangeRate);
+
+        Assert.assertTrue(comparator.compare(a, b) == 0);
+
+        b.setBalance(exchangeRate.get(c.getCurrency()).multiply(new BigDecimal(999999999)));
+        c.setBalance(exchangeRate.get(b.getCurrency()).multiply(new BigDecimal(999999999)));
+
+        Assert.assertTrue(comparator.compare(b, c) == 0);
     }
 }
