@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Account implements Comparable<Account>{
-    UUID id;
-    Currency currency;
-    LocalDateTime created;
-    BigDecimal balance;
-    User user;
+public class Account{
+    private UUID id;
+    private Currency currency;
+    private LocalDateTime created;
+    private BigDecimal balance;
+    private User user;
 
     public Account(User user, Currency currency) {
         this.user = user;
@@ -36,14 +36,6 @@ public class Account implements Comparable<Account>{
         return currency;
     }
 
-    public void addMoney(BigDecimal ammount) {
-
-    }
-
-    public void addMoney(long ammount, Currency currency) {
-
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,10 +47,5 @@ public class Account implements Comparable<Account>{
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public int compareTo(Account o) {
-        return balance.subtract(o.balance).signum();
     }
 }
