@@ -89,7 +89,9 @@ public class AccountComparatorTest {
 
     @Test
     public void exchangeRateEquals() {
-        Account accRUB = getTestAccount(Currency.RUB), accUSD = getTestAccount(Currency.USD), accEUR = getTestAccount(Currency.EUR);
+        Account accRUB = getTestAccount(Currency.RUB);
+        Account accUSD = getTestAccount(Currency.USD);
+        Account accEUR = getTestAccount(Currency.EUR);
 
         BigDecimal balance100RUBinUSD = exchangeRate.get(accUSD.getCurrency()).multiply(new BigDecimal(100L));
         accRUB.setBalance(balance100RUBinUSD);
