@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class AccountComparator implements Comparator<Account> {
 
-    private Map<Currency, BigDecimal> exchangeRate;
+    private final Map<Currency, BigDecimal> exchangeRate;
 
     public AccountComparator(Map<Currency, BigDecimal> exchangeRate) {
         this.exchangeRate = exchangeRate;

@@ -1,7 +1,8 @@
-import ru.minipay.model.*;
+package ru.minipay.model;
+
 import org.junit.Assert;
 import org.junit.Test;
-import ru.minipay.model.Currency;
+import org.junit.Before;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,9 +10,10 @@ import java.util.*;
 
 public class AccountComparatorTest {
     private Random rnd;
-    private static Map<Currency, BigDecimal> exchangeRate;
+    private Map<Currency, BigDecimal> exchangeRate;
 
-    {
+    @Before
+    public void setUp(){
         exchangeRate = new HashMap<>();
         exchangeRate.put(Currency.RUB, BigDecimal.ONE);
         exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
@@ -134,9 +136,5 @@ public class AccountComparatorTest {
         return new Account(
                 new User("Клиент", "Тестовый", rnd.nextBoolean()?Gender.MALE:Gender.FEMALE, randomDate),
                 currency);
-    }
-
-    private BigDecimal getInCurrency(BigDecimal value, Account account) {
-        return exchangeRate.get(account.getCurrency()).multiply(value);
     }
 }
