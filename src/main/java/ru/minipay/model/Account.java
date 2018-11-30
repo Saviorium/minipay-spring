@@ -1,23 +1,35 @@
 package ru.minipay.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Account{
-    private UUID id;
-    private Currency currency;
-    private LocalDateTime created;
+    private final UUID id;
+    private final Currency currency;
+    private final Instant created;
+    private final User user;
     private BigDecimal balance;
-    private User user;
 
     public Account(User user, Currency currency) {
         this.user = user;
         this.currency = currency;
-        id = UUID.randomUUID();
-        created = LocalDateTime.now();
-        balance = new BigDecimal(0);
+        this.id = UUID.randomUUID();
+        this.created = Instant.now();
+        this.balance = new BigDecimal(0);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Instant getCreated() {
+        return created;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public BigDecimal getBalance() {
