@@ -2,7 +2,14 @@ package ru.minipay;
 
 import ru.minipay.dao.AccountDao;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
+import ru.minipay.model.Currency;
+import ru.minipay.service.FundExchangeService;
+import ru.minipay.service.FundExchangeServiceLocalImpl;
 import ru.minipay.service.FundTransferServiceImpl;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MinipayApplicationFactory {
     private static final MinipayApplicationFactory INSTANCE = new MinipayApplicationFactory();
@@ -14,7 +21,14 @@ public class MinipayApplicationFactory {
     }
 
     public MinipayApplication createApplication() {
+        Map<Currency, BigDecimal> exchangeRate = new HashMap<>();
+        exchangeRate.put(Currency.RUB, BigDecimal.ONE);
+        exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
+        exchangeRate.put(Currency.EUR, new BigDecimal("74.8"));
+        FundExchangeService exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
+
         AccountDao dao = new AccountDaoInMemoryImpl();
-        return new MinipayApplication(dao, new FundTransferServiceImpl(dao));
+
+        return new MinipayApplication(dao, new FundTransferServiceImpl(dao, exchangeService));
     }
 }
