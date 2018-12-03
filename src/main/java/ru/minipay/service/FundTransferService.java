@@ -1,10 +1,10 @@
 package ru.minipay.service;
 
-import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public interface FundTransferService {
-    void makeTransfer(Account from, Account to, Currency currency, BigDecimal amount);
+    void makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount);
 }

@@ -5,6 +5,7 @@ import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class FundTransferServiceImpl implements FundTransferService{
     private final AccountDao dao;
@@ -16,10 +17,10 @@ public class FundTransferServiceImpl implements FundTransferService{
     }
 
     @Override
-    public void makeTransfer(Account from, Account to, Currency currency, BigDecimal amount) {
-        //TODO: what if dao returns null?
-        from = dao.getById(from.getId());
-        to = dao.getById(to.getId());
+    public void makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) {
+        //TODO: if no such user throw exception
+        Account from = dao.getById(fromId);
+        Account to = dao.getById(toId);
         BigDecimal amountInCurrency = exchangeService.exchange(amount, currency, from.getCurrency());
         from.setBalance(from.getBalance().subtract(amountInCurrency));
         dao.insert(from);

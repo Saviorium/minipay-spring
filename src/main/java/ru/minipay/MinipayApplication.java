@@ -7,6 +7,7 @@ import ru.minipay.model.User;
 import ru.minipay.service.FundTransferService;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class MinipayApplication {
     private AccountDao accountDao;
@@ -24,7 +25,7 @@ public class MinipayApplication {
         return account;
     }
 
-    public void makeTransfer(Account from, Account to, Currency currency, BigDecimal amount) {
-        fundTransferService.makeTransfer(from, to, currency, amount);
+    public void makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
+        fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
 }
