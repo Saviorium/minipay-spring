@@ -1,28 +1,25 @@
 package ru.minipay;
 
-import ru.minipay.dao.AccountDao;
 import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
 import ru.minipay.model.User;
 import ru.minipay.service.FundTransferService;
+import ru.minipay.service.UserAccountsService;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MinipayApplication {
-    private AccountDao accountDao;
     private FundTransferService fundTransferService;
+    private UserAccountsService userAccountsService;
 
-    public MinipayApplication(AccountDao accountDao, FundTransferService fundTransferService) {
-        this.accountDao = accountDao;
+    public MinipayApplication(UserAccountsService userAccountsService, FundTransferService fundTransferService) {
         this.fundTransferService = fundTransferService;
+        this.userAccountsService = userAccountsService;
     }
 
     public Account createAccount(User user, Currency currency, BigDecimal initBalance) {
-        Account account = new Account(user, currency);
-        account.setBalance(initBalance);
-        accountDao.insert(account);
-        return account;
+        return this.userAccountsService.createAccount(user, currency, initBalance);
     }
 
     public void makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {

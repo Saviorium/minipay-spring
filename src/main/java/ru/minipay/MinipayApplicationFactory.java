@@ -6,6 +6,7 @@ import ru.minipay.model.Currency;
 import ru.minipay.service.FundExchangeService;
 import ru.minipay.service.FundExchangeServiceLocalImpl;
 import ru.minipay.service.FundTransferServiceImpl;
+import ru.minipay.service.UserAccountsService;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -21,14 +22,15 @@ public class MinipayApplicationFactory {
     }
 
     public MinipayApplication createApplication() {
+        AccountDao dao = new AccountDaoInMemoryImpl();
+        UserAccountsService userAccountsService = new UserAccountsService(dao);
+
         Map<Currency, BigDecimal> exchangeRate = new HashMap<>();
         exchangeRate.put(Currency.RUB, BigDecimal.ONE);
         exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
         exchangeRate.put(Currency.EUR, new BigDecimal("74.8"));
         FundExchangeService exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
 
-        AccountDao dao = new AccountDaoInMemoryImpl();
-
-        return new MinipayApplication(dao, new FundTransferServiceImpl(dao, exchangeService));
+        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(dao, exchangeService));
     }
 }
