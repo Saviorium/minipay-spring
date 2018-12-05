@@ -17,6 +17,10 @@ public class SampleAccountGenerator {
         return new Account(getTestUser(), currency);
     }
 
+    public Account getTestAccount() {
+        return getTestAccount(Currency.RUB);
+    }
+
     public static User getTestUser() {
         LocalDate randomDate = LocalDate.of(
                 1900 + rnd.nextInt(100),
