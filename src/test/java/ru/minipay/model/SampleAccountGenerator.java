@@ -4,13 +4,20 @@ import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SampleAccountGenerator {
-    private ThreadLocalRandom rnd = ThreadLocalRandom.current();
+    private static final SampleAccountGenerator INSTANCE = new SampleAccountGenerator();
+    private static final ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
-    public Account getTestAccount(Currency currency) {
+    private SampleAccountGenerator() {}
+
+    public static SampleAccountGenerator getInstance() {
+        return INSTANCE;
+    }
+
+    public static Account getTestAccount(Currency currency) {
         return new Account(getTestUser(), currency);
     }
 
-    public User getTestUser() {
+    public static User getTestUser() {
         LocalDate randomDate = LocalDate.of(
                 1900 + rnd.nextInt(100),
                 1 + rnd.nextInt(12),

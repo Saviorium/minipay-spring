@@ -3,13 +3,14 @@ package ru.minipay.model;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
+import ru.minipay.service.ExchangeRateGenerator;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 public class AccountComparatorTest {
     private Random rnd;
-    private final SampleAccountGenerator accGen = new SampleAccountGenerator();
+    private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
     private Map<Currency, BigDecimal> exchangeRate;
 
     private final Account accRUB = accGen.getTestAccount(Currency.RUB);
@@ -18,10 +19,7 @@ public class AccountComparatorTest {
 
     @Before
     public void setUp(){
-        exchangeRate = new HashMap<>();
-        exchangeRate.put(Currency.RUB, BigDecimal.ONE);
-        exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
-        exchangeRate.put(Currency.EUR, new BigDecimal("74.8"));
+        exchangeRate = ExchangeRateGenerator.getSampleExchangeRate();
 
         rnd = new Random();
     }

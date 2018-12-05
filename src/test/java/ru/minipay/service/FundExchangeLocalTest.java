@@ -7,7 +7,6 @@ import ru.minipay.model.Currency;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FundExchangeLocalTest {
@@ -16,11 +15,7 @@ public class FundExchangeLocalTest {
 
     @Before
     public void setUp() {
-        exchangeRate = new HashMap<>();
-        exchangeRate.put(Currency.RUB, BigDecimal.ONE);
-        exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
-        exchangeRate.put(Currency.EUR, new BigDecimal("74.8"));
-
+        exchangeRate = ExchangeRateGenerator.getSampleExchangeRate();
         exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
     }
 

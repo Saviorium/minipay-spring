@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 public class MinipayApplicationTest {
     private MinipayApplication app;
-    private final SampleAccountGenerator accGen = new SampleAccountGenerator();
+    private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
 
     @Before
     public void setUp() {
