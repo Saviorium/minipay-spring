@@ -1,7 +1,6 @@
 package ru.minipay.service;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import ru.minipay.dao.AccountDao;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
@@ -17,11 +16,6 @@ public class FundTransferServiceTest {
             new FundTransferServiceImpl(
                     dao,
                     new FundExchangeServiceLocalImpl(ExchangeRateGenerator.getSampleExchangeRate()));
-
-    @Before
-    public void setUp() {
-
-    }
 
     @Test
     public void checkMakeTransfer() {
@@ -48,7 +42,11 @@ public class FundTransferServiceTest {
         Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
 
-        //NullPointerException
-        //transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
+        try {
+            transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
+            Assert.fail("Expected exception that Account not found.");
+        } catch (IllegalArgumentException e) {
+            //Expected exception
+        }
     }
 }

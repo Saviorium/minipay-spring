@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MinipayApplication {
-    private FundTransferService fundTransferService;
-    private UserAccountsService userAccountsService;
+    private final FundTransferService fundTransferService;
+    private final UserAccountsService userAccountsService;
 
     public MinipayApplication(UserAccountsService userAccountsService, FundTransferService fundTransferService) {
         this.fundTransferService = fundTransferService;

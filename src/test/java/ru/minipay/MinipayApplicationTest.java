@@ -22,7 +22,7 @@ public class MinipayApplicationTest {
     @Test
     public void checkCreateAccount() {
         BigDecimal balance = new BigDecimal("100.01");
-        Account acc = app.createAccount(accGen.getTestUser(), Currency.RUB, balance);
+        Account acc = app.createAccount(SampleAccountGenerator.getTestUser(), Currency.RUB, balance);
         Assert.assertNotNull(acc.getId());
         Assert.assertEquals(0, balance.compareTo(acc.getBalance()));
     }

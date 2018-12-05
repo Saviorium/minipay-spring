@@ -13,9 +13,9 @@ public class AccountComparatorTest {
     private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
     private Map<Currency, BigDecimal> exchangeRate;
 
-    private final Account accRUB = accGen.getTestAccount(Currency.RUB);
-    private final Account accUSD = accGen.getTestAccount(Currency.USD);
-    private final Account accEUR = accGen.getTestAccount(Currency.EUR);
+    private final Account accRUB = SampleAccountGenerator.getTestAccount(Currency.RUB);
+    private final Account accUSD = SampleAccountGenerator.getTestAccount(Currency.USD);
+    private final Account accEUR = SampleAccountGenerator.getTestAccount(Currency.EUR);
 
     @Before
     public void setUp(){
@@ -26,9 +26,9 @@ public class AccountComparatorTest {
 
     @Test
     public void checkRelations() {
-        Account a = accGen.getTestAccount(Currency.RUB);
-        Account b = accGen.getTestAccount(Currency.RUB);
-        Account c = accGen.getTestAccount(Currency.RUB);
+        Account a = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account b = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account c = SampleAccountGenerator.getTestAccount(Currency.RUB);
         a.setBalance(BigDecimal.valueOf(12345, 2));
         b.setBalance(BigDecimal.valueOf(12345, 2));
         Comparator<Account> comparator = new AccountComparator(exchangeRate);
@@ -75,7 +75,7 @@ public class AccountComparatorTest {
     public void sortRandomAccounts() {
         Account[] testArray = new Account[100];
         for(int i = 0; i < testArray.length; i++) {
-            testArray[i] = accGen.getTestAccount(Currency.RUB);
+            testArray[i] = SampleAccountGenerator.getTestAccount(Currency.RUB);
             testArray[i].setBalance(Math.abs(rnd.nextLong()));
         }
         Comparator<Account> comparator = new AccountComparator(exchangeRate);
