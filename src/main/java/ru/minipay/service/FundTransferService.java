@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface FundTransferService {
-    void makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount);
+    FundTransferResult makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount);
 }

@@ -3,6 +3,7 @@ package ru.minipay;
 import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
 import ru.minipay.model.User;
+import ru.minipay.service.FundTransferResult;
 import ru.minipay.service.FundTransferService;
 import ru.minipay.service.UserAccountsService;
 
@@ -23,6 +24,6 @@ public class MinipayApplication {
     }
 
     public void makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
-        fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
+        FundTransferResult result = fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
 }

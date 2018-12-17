@@ -17,18 +17,28 @@ public class FundTransferServiceImpl implements FundTransferService{
     }
 
     @Override
-    public void makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) {
+    public FundTransferResult makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) {
         Account from = dao.getById(fromId);
         Account to = dao.getById(toId);
         if(from == null || to == null) {
-            throw new IllegalArgumentException("User not found");
+            return new FundTransferResult(false, "User not found");
         }
-        BigDecimal amountInCurrency = exchangeService.exchange(amount, currency, from.getCurrency());
-        from.setBalance(from.getBalance().subtract(amountInCurrency));
+        BigDecimal amountFromInCurrency = exchangeService.exchange(amount, currency, from.getCurrency());
+        if(from.getBalance().subtract(amountFromInCurrency).signum() < 1) {
+            return new FundTransferResult(false, "From balance if negative");
+        }
+        from.setBalance(from.getBalance().subtract(amountFromInCurrency));
         dao.insert(from);
 
-        amountInCurrency = exchangeService.exchange(amount, currency, to.getCurrency());
-        to.setBalance(to.getBalance().add(amountInCurrency));
-        dao.insert(to);
+        BigDecimal amountToInCurrency = exchangeService.exchange(amount, currency, to.getCurrency());
+        to.setBalance(to.getBalance().add(amountToInCurrency));
+        try {
+            dao.insert(to);
+        } catch (Exception e) { //TODO: handle DB exceptions properly
+            from.setBalance(from.getBalance().add(amountFromInCurrency));
+            dao.insert(from); //FIXME: can fail too if DB is dead
+            return new FundTransferResult(false, e.getMessage());
+        }
+        return new FundTransferResult(true);
     }
 }
