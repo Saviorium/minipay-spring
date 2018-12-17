@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 
 public class FundTransferServiceTest {
     private final AccountDao dao = new AccountDaoInMemoryImpl();
+    private static final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
     private final FundTransferService transferService =
             new FundTransferServiceImpl(
                     dao,
@@ -19,10 +20,10 @@ public class FundTransferServiceTest {
 
     @Test
     public void checkMakeTransfer() {
-        Account acc1 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         dao.insert(acc1);
-        Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc2 = accGen.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
         dao.insert(acc2);
 
@@ -36,10 +37,10 @@ public class FundTransferServiceTest {
 
     @Test
     public void makeTransferToUnknownAccount() {
-        Account acc1 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         dao.insert(acc1);
-        Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc2 = accGen.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
 
         FundTransferResult result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
@@ -48,10 +49,10 @@ public class FundTransferServiceTest {
 
     @Test
     public void transferWhenNotEnoughMoney() {
-        Account acc1 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         dao.insert(acc1);
-        Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        Account acc2 = accGen.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
         dao.insert(acc2);
 

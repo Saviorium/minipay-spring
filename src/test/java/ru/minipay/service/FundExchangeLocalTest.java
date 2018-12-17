@@ -10,11 +10,11 @@ import java.math.RoundingMode;
 import java.util.Map;
 
 public class FundExchangeLocalTest {
-    private Map<Currency, BigDecimal> exchangeRate;
-    private FundExchangeService exchangeService;
+    private static Map<Currency, BigDecimal> exchangeRate;
+    private static FundExchangeService exchangeService;
 
     @BeforeClass
-    public void setUp() {
+    public static void setUp() {
         exchangeRate = ExchangeRateGenerator.getSampleExchangeRate();
         exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
     }

@@ -10,11 +10,11 @@ import ru.minipay.model.SampleAccountGenerator;
 import java.math.BigDecimal;
 
 public class MinipayApplicationTest {
-    private MinipayApplication app;
+    private static MinipayApplication app;
     private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
 
     @BeforeClass
-    public void setUp() {
+    public static void setUp() {
         MinipayApplicationFactory appFactory = MinipayApplicationFactory.getInstance();
         app = appFactory.createApplication();
     }
@@ -22,7 +22,7 @@ public class MinipayApplicationTest {
     @Test
     public void checkCreateAccount() {
         BigDecimal balance = new BigDecimal("100.01");
-        Account acc = app.createAccount(SampleAccountGenerator.getTestUser(), Currency.RUB, balance);
+        Account acc = app.createAccount(accGen.getTestUser(), Currency.RUB, balance);
         Assert.assertNotNull(acc.getId());
         Assert.assertEquals(0, balance.compareTo(acc.getBalance()));
     }

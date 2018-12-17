@@ -13,7 +13,7 @@ public class SampleAccountGenerator {
         return INSTANCE;
     }
 
-    public static Account getTestAccount(Currency currency) {
+    public Account getTestAccount(Currency currency) {
         return new Account(getTestUser(), currency);
     }
 
@@ -21,7 +21,7 @@ public class SampleAccountGenerator {
         return getTestAccount(Currency.RUB);
     }
 
-    public static User getTestUser() {
+    public User getTestUser() {
         LocalDate randomDate = LocalDate.of(
                 1900 + rnd.nextInt(100),
                 1 + rnd.nextInt(12),
