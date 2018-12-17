@@ -23,7 +23,7 @@ public class MinipayApplication {
         return this.userAccountsService.createAccount(user, currency, initBalance);
     }
 
-    public void makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
-        FundTransferResult result = fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
+    public FundTransferResult makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
+        return fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
 }
