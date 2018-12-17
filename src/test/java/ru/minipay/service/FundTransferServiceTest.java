@@ -42,11 +42,24 @@ public class FundTransferServiceTest {
         Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
 
-        try {
-            transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
-            Assert.fail("Expected exception that Account not found.");
-        } catch (IllegalArgumentException e) {
-            //Expected exception
-        }
+        FundTransferResult result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
+        Assert.assertFalse(result.isSuccess());
+    }
+
+    @Test
+    public void transferWhenNotEnoughMoney() {
+        Account acc1 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        acc1.setBalance(100L);
+        dao.insert(acc1);
+        Account acc2 = SampleAccountGenerator.getTestAccount(Currency.RUB);
+        acc2.setBalance(100L);
+        dao.insert(acc2);
+
+        FundTransferResult result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(101L));
+        Assert.assertFalse(result.isSuccess());
+        Assert.assertEquals("Check balance unchanged in dao",
+                BigDecimal.valueOf(100L), dao.getById(acc1.getId()).getBalance());
+        Assert.assertEquals("Check balance unchanged in dao",
+                BigDecimal.valueOf(100L), dao.getById(acc2.getId()).getBalance());
     }
 }
