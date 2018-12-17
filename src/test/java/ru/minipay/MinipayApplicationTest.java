@@ -1,7 +1,7 @@
 package ru.minipay;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
@@ -13,7 +13,7 @@ public class MinipayApplicationTest {
     private MinipayApplication app;
     private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
 
-    @Before
+    @BeforeClass
     public void setUp() {
         MinipayApplicationFactory appFactory = MinipayApplicationFactory.getInstance();
         app = appFactory.createApplication();

@@ -1,8 +1,8 @@
 package ru.minipay.model;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Before;
 import ru.minipay.service.ExchangeRateGenerator;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ public class AccountComparatorTest {
     private final Account accUSD = SampleAccountGenerator.getTestAccount(Currency.USD);
     private final Account accEUR = SampleAccountGenerator.getTestAccount(Currency.EUR);
 
-    @Before
+    @BeforeClass
     public void setUp(){
         exchangeRate = ExchangeRateGenerator.getSampleExchangeRate();
 

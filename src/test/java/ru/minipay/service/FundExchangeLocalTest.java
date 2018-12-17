@@ -1,7 +1,7 @@
 package ru.minipay.service;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.minipay.model.Currency;
 
@@ -13,7 +13,7 @@ public class FundExchangeLocalTest {
     private Map<Currency, BigDecimal> exchangeRate;
     private FundExchangeService exchangeService;
 
-    @Before
+    @BeforeClass
     public void setUp() {
         exchangeRate = ExchangeRateGenerator.getSampleExchangeRate();
         exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
