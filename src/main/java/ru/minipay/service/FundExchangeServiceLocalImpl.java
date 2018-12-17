@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class FundExchangeServiceLocalImpl implements FundExchangeService {
     private final Map<Currency, BigDecimal> exchangeRate;
+    private static final int SCALE = 2;
 
     public FundExchangeServiceLocalImpl(Map<Currency, BigDecimal> exchangeRate) {
         this.exchangeRate = exchangeRate;
@@ -14,9 +15,7 @@ public class FundExchangeServiceLocalImpl implements FundExchangeService {
 
     @Override
     public BigDecimal exchange(BigDecimal amount, Currency from, Currency to) {
-        amount = amount.multiply(exchangeRate.get(from));
-        int scale = 2;
-        amount = amount.divide(exchangeRate.get(to), scale, java.math.RoundingMode.HALF_UP);
-        return amount;
+        return amount.multiply(exchangeRate.get(from))
+                     .divide(exchangeRate.get(to), SCALE, java.math.RoundingMode.HALF_UP);
     }
 }
