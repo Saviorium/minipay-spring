@@ -20,6 +20,13 @@ public class Account{
         this.balance = new BigDecimal(0);
     }
 
+    public Account() {
+        this.user = null;
+        this.currency = null;
+        this.id = null;
+        this.created = null;
+    }
+
     public UUID getId() {
         return id;
     }

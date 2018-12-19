@@ -13,6 +13,10 @@ public class FundTransferResult {
         this(success, "");
     }
 
+    public FundTransferResult() {
+        this(true, "");
+    }
+
     public boolean isSuccess() {
         return success;
     }
