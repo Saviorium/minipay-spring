@@ -24,4 +24,9 @@ public class FundTransferResult {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        return success?"Success":"Failure" + "! Message: " + message;
+    }
 }
