@@ -32,9 +32,17 @@ public class Client {
                         new BufferedReader(
                                 new InputStreamReader(System.in))
         ) {
-            String userInput;
-            userInput = stdIn.readLine();
-            out.println(userInput);
+            StringBuilder requestStr = new StringBuilder("{\"fromAccId\":\"");
+            System.out.println("Enter id from:");
+            requestStr.append(stdIn.readLine()).append("\",\"toAccId\":\"");
+            System.out.println("Enter id to:");
+            requestStr.append(stdIn.readLine()).append("\",\"currency\":\"RUB\",\"amount\":");
+            System.out.println("Enter amount RUB:");
+            requestStr.append(stdIn.readLine()).append("}");
+
+            System.out.println(requestStr);
+
+            out.println(requestStr);
             String response = in.readLine();
             System.out.println("Server: " + response);
             ObjectMapper objectMapper = new ObjectMapper();

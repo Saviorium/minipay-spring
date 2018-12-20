@@ -16,7 +16,7 @@ public class User {
         this.birthday = birthday;
     }
 
-    public User() {}
+    private User() {} //for jackson deserialization
 
     public String getFirstName() {
         return firstName;

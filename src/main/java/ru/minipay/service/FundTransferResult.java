@@ -13,7 +13,7 @@ public class FundTransferResult {
         this(success, "");
     }
 
-    public FundTransferResult() {
+    private FundTransferResult() {
         this(true, "");
     }
 

@@ -20,7 +20,7 @@ public class Account{
         this.balance = new BigDecimal(0);
     }
 
-    public Account() {
+    private Account() { //for jackson deserialization
         this.user = null;
         this.currency = null;
         this.id = null;

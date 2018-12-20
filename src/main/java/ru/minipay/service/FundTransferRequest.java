@@ -1,0 +1,43 @@
+package ru.minipay.service;
+
+import ru.minipay.model.Currency;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public class FundTransferRequest {
+    private final UUID fromAccId;
+    private final UUID toAccId;
+    private final Currency currency;
+    private final BigDecimal amount;
+
+    public FundTransferRequest(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
+        this.fromAccId = fromAccId;
+        this.toAccId = toAccId;
+        this.currency = currency;
+        this.amount = amount;
+    }
+
+    private FundTransferRequest() {
+        this.fromAccId = null;
+        this.toAccId = null;
+        this.currency = null;
+        this.amount = null;
+    }
+
+    public UUID getFromAccId() {
+        return fromAccId;
+    }
+
+    public UUID getToAccId() {
+        return toAccId;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+}
