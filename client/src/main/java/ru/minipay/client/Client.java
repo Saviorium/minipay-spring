@@ -1,8 +1,5 @@
 package ru.minipay.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.minipay.service.FundTransferResult;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +11,7 @@ public class Client {
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println(
-                    "Usage: java ru.minipay.client.Client <host name> <port number>");
+                    "Usage: java java.ru.minipay.client.Client <host name> <port number>");
             System.exit(1);
         }
 
@@ -45,9 +42,6 @@ public class Client {
             out.println(requestStr);
             String response = in.readLine();
             System.out.println("Server: " + response);
-            ObjectMapper objectMapper = new ObjectMapper();
-            FundTransferResult resultObj = objectMapper.readValue(response, FundTransferResult.class);
-            System.out.println("Got result object: " + resultObj);
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
