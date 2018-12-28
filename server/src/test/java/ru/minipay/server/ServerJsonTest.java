@@ -19,8 +19,6 @@ public class ServerJsonTest {
         String accJson = objectMapper.writeValueAsString(acc1);
         Account acc2 = objectMapper.readValue(accJson, Account.class);
         Assert.assertEquals(acc1, acc2);
-        System.out.println(accJson);
-        System.out.println(acc2);
     }
 
     @Test
