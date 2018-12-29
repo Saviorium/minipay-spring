@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.minipay.model.Account;
 import ru.minipay.model.SampleAccountGenerator;
-import ru.minipay.service.FundTransferResult;
+import ru.minipay.model.FundTransferResult;
 
 public class ServerJsonTest {
     private final static SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();

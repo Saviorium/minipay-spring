@@ -1,4 +1,4 @@
-package ru.minipay.service;
+package ru.minipay.model;
 
 public class FundTransferResult {
     private final boolean success;

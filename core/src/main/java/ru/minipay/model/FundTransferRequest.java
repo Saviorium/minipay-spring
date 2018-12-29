@@ -1,4 +1,4 @@
-package ru.minipay.service;
+package ru.minipay.model;
 
 import ru.minipay.model.Currency;
 

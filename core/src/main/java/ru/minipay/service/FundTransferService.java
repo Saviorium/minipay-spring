@@ -1,6 +1,7 @@
 package ru.minipay.service;
 
 import ru.minipay.model.Currency;
+import ru.minipay.model.FundTransferResult;
 
 import java.math.BigDecimal;
 import java.util.UUID;

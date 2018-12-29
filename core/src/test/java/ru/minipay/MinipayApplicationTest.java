@@ -6,7 +6,7 @@ import org.junit.Test;
 import ru.minipay.model.Account;
 import ru.minipay.model.Currency;
 import ru.minipay.model.SampleAccountGenerator;
-import ru.minipay.service.FundTransferResult;
+import ru.minipay.model.FundTransferResult;
 
 import java.math.BigDecimal;
 

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
 import ru.minipay.model.Account;
-import ru.minipay.service.FundTransferRequest;
-import ru.minipay.service.FundTransferResult;
+import ru.minipay.model.FundTransferRequest;
+import ru.minipay.model.FundTransferResult;
 
 import java.io.*;
 import java.net.ServerSocket;
