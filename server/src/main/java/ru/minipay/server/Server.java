@@ -49,8 +49,7 @@ public class Server {
         FundTransferResult result;
         try {
             FundTransferRequest request = jsonParser.readValue(requestStr, FundTransferRequest.class);
-            application.makeTransfer(request.getFromAccId(), request.getToAccId(), request.getCurrency(), request.getAmount());
-            result = new FundTransferResult(true);
+            result = application.makeTransfer(request.getFromAccId(), request.getToAccId(), request.getCurrency(), request.getAmount());
         } catch (IOException e) {
             result = new FundTransferResult(false, e.getMessage());
         }
