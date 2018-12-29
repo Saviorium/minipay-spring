@@ -1,13 +1,12 @@
 package ru.minipay.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
-import ru.minipay.model.Account;
-import ru.minipay.model.FundTransferRequest;
-import ru.minipay.model.FundTransferResult;
+import ru.minipay.model.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -24,6 +23,7 @@ public class Server {
         Account acc1 = application.createTestAccount();
         Account acc2 = application.createTestAccount();
         System.out.println(acc1 + "\n\r" + acc2);
+        jsonParser.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try (ServerSocket server = new ServerSocket(port)) {
 
             while(true) {
@@ -46,13 +46,36 @@ public class Server {
     }
 
     private static String process(String requestStr) throws JsonProcessingException {
-        FundTransferResult result;
+        String result;
         try {
-            FundTransferRequest request = jsonParser.readValue(requestStr, FundTransferRequest.class);
-            result = application.makeTransfer(request.getFromAccId(), request.getToAccId(), request.getCurrency(), request.getAmount());
+            Request request = jsonParser.readValue(requestStr, Request.class);
+            if(request.getType() == null) {
+                result = "Error: Request type is not sent";
+                return result;
+            }
+            switch (request.getType()) {
+                case FundTransfer:
+                {
+                    FundTransferRequest transferRequest = jsonParser.readValue(requestStr, FundTransferRequest.class);
+                    FundTransferResult transferResult = application.makeTransfer(
+                            transferRequest.getFromAccId(), transferRequest.getToAccId(),
+                            transferRequest.getCurrency(), transferRequest.getAmount()
+                    );
+                    result = jsonParser.writeValueAsString(transferResult);
+                    break;
+                }
+                case CreateAccount:
+                {
+                    CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
+                    result = application.createTestAccount().getId().toString();
+                    break;
+                }
+                default:
+                    result = "Unsupported request type:" + request.getType().toString();
+            }
         } catch (IOException e) {
-            result = new FundTransferResult(false, e.getMessage());
+            result = e.getMessage();
         }
-        return jsonParser.writeValueAsString(result);
+        return result;
     }
 }

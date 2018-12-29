@@ -29,7 +29,11 @@ public class Client {
                         new BufferedReader(
                                 new InputStreamReader(System.in))
         ) {
-            StringBuilder requestStr = new StringBuilder("{\"fromAccId\":\"");
+            /*out.println("{\"type\":\"CreateAccount\"}");
+            String response = in.readLine();
+            System.out.println("Server: " + response);*/
+
+            StringBuilder requestStr = new StringBuilder("{\"type\":\"FundTransfer\",\"fromAccId\":\"");
             System.out.println("Enter id from:");
             requestStr.append(stdIn.readLine()).append("\",\"toAccId\":\"");
             System.out.println("Enter id to:");
