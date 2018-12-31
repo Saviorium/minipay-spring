@@ -3,8 +3,8 @@ package ru.minipay.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.minipay.model.Currency;
-import ru.minipay.model.FundTransferRequest;
+import ru.minipay.api.Currency;
+import ru.minipay.api.FundTransferRequest;
 
 import java.io.IOException;
 import java.math.BigDecimal;

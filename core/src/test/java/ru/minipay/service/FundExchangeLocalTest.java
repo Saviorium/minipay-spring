@@ -3,7 +3,7 @@ package ru.minipay.service;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.minipay.model.Currency;
+import ru.minipay.api.Currency;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

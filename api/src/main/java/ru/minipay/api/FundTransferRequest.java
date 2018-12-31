@@ -1,4 +1,4 @@
-package ru.minipay.model;
+package ru.minipay.api;
 
 import java.math.BigDecimal;
 import java.util.UUID;

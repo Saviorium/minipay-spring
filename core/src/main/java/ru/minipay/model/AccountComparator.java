@@ -1,5 +1,7 @@
 package ru.minipay.model;
 
+import ru.minipay.api.Currency;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Comparator;

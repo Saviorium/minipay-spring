@@ -3,6 +3,7 @@ package ru.minipay.model;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.minipay.api.Currency;
 import ru.minipay.service.ExchangeRateGenerator;
 
 import java.math.BigDecimal;
@@ -11,11 +12,11 @@ import java.util.*;
 public class AccountComparatorTest {
     private static Random rnd;
     private static final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
-    private static Map<Currency, BigDecimal> exchangeRate;
+    private static Map<ru.minipay.api.Currency, BigDecimal> exchangeRate;
 
-    private final Account accRUB = accGen.getTestAccount(Currency.RUB);
-    private final Account accUSD = accGen.getTestAccount(Currency.USD);
-    private final Account accEUR = accGen.getTestAccount(Currency.EUR);
+    private final Account accRUB = accGen.getTestAccount(ru.minipay.api.Currency.RUB);
+    private final Account accUSD = accGen.getTestAccount(ru.minipay.api.Currency.USD);
+    private final Account accEUR = accGen.getTestAccount(ru.minipay.api.Currency.EUR);
 
     @BeforeClass
     public static void setUp(){
@@ -26,9 +27,9 @@ public class AccountComparatorTest {
 
     @Test
     public void checkRelations() {
-        Account a = accGen.getTestAccount(Currency.RUB);
-        Account b = accGen.getTestAccount(Currency.RUB);
-        Account c = accGen.getTestAccount(Currency.RUB);
+        Account a = accGen.getTestAccount(ru.minipay.api.Currency.RUB);
+        Account b = accGen.getTestAccount(ru.minipay.api.Currency.RUB);
+        Account c = accGen.getTestAccount(ru.minipay.api.Currency.RUB);
         a.setBalance(BigDecimal.valueOf(12345, 2));
         b.setBalance(BigDecimal.valueOf(12345, 2));
         Comparator<Account> comparator = new AccountComparator(exchangeRate);

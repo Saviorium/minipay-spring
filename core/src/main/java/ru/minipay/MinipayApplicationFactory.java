@@ -2,7 +2,7 @@ package ru.minipay;
 
 import ru.minipay.dao.AccountDao;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
-import ru.minipay.model.Currency;
+import ru.minipay.api.Currency;
 import ru.minipay.service.FundExchangeService;
 import ru.minipay.service.FundExchangeServiceLocalImpl;
 import ru.minipay.service.FundTransferServiceImpl;

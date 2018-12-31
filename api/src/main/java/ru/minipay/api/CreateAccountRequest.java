@@ -1,4 +1,4 @@
-package ru.minipay.model;
+package ru.minipay.api;
 
 public class CreateAccountRequest extends Request {
     public CreateAccountRequest() {

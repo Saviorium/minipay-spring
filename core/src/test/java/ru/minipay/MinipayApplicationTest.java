@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.minipay.model.Account;
-import ru.minipay.model.Currency;
+import ru.minipay.api.Currency;
 import ru.minipay.model.SampleAccountGenerator;
-import ru.minipay.model.FundTransferResult;
+import ru.minipay.api.FundTransferResult;
 
 import java.math.BigDecimal;
 

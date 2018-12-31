@@ -1,9 +1,9 @@
 package ru.minipay;
 
 import ru.minipay.model.Account;
-import ru.minipay.model.Currency;
+import ru.minipay.api.Currency;
 import ru.minipay.model.User;
-import ru.minipay.model.FundTransferResult;
+import ru.minipay.api.FundTransferResult;
 import ru.minipay.service.FundTransferService;
 import ru.minipay.service.UserAccountsService;
 

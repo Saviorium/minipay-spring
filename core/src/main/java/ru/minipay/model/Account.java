@@ -1,5 +1,7 @@
 package ru.minipay.model;
 
+import ru.minipay.api.Currency;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;

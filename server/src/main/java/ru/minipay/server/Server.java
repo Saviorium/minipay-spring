@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
+import ru.minipay.api.CreateAccountRequest;
+import ru.minipay.api.FundTransferRequest;
+import ru.minipay.api.FundTransferResult;
+import ru.minipay.api.Request;
 import ru.minipay.model.*;
 
 import java.io.*;
@@ -45,7 +49,7 @@ public class Server {
         }
     }
 
-    private static String process(String requestStr) throws JsonProcessingException {
+    private static String process(String requestStr) {
         String result;
         try {
             Request request = jsonParser.readValue(requestStr, Request.class);

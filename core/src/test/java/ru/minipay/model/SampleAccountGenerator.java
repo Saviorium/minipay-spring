@@ -1,5 +1,7 @@
 package ru.minipay.model;
 
+import ru.minipay.api.Currency;
+
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
