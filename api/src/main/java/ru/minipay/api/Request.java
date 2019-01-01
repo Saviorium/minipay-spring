@@ -1,17 +1,14 @@
 package ru.minipay.api;
 
-public class Request {
-    private final RequestType type;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-    public Request(RequestType type) {
-        this.type = type;
-    }
-
-    private Request() {
-        this.type = null;
-    }
-
-    public RequestType getType() {
-        return type;
-    }
-}
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = FundTransferRequest.class, name = "FundTransfer"),
+        @JsonSubTypes.Type(value = CreateAccountRequest.class, name = "CreateAccount")
+})
+public interface Request {}

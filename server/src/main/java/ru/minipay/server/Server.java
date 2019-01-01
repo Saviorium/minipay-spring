@@ -1,6 +1,5 @@
 package ru.minipay.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -53,29 +52,18 @@ public class Server {
         String result;
         try {
             Request request = jsonParser.readValue(requestStr, Request.class);
-            if(request.getType() == null) {
-                result = "Error: Request type is not sent";
-                return result;
-            }
-            switch (request.getType()) {
-                case FundTransfer:
-                {
-                    FundTransferRequest transferRequest = jsonParser.readValue(requestStr, FundTransferRequest.class);
-                    FundTransferResult transferResult = application.makeTransfer(
-                            transferRequest.getFromAccId(), transferRequest.getToAccId(),
-                            transferRequest.getCurrency(), transferRequest.getAmount()
-                    );
-                    result = jsonParser.writeValueAsString(transferResult);
-                    break;
-                }
-                case CreateAccount:
-                {
-                    CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
-                    result = application.createTestAccount().getId().toString();
-                    break;
-                }
-                default:
-                    result = "Unsupported request type:" + request.getType().toString();
+            if(request instanceof FundTransferRequest) {
+                FundTransferRequest transferRequest = jsonParser.readValue(requestStr, FundTransferRequest.class);
+                FundTransferResult transferResult = application.makeTransfer(
+                        transferRequest.getFromAccId(), transferRequest.getToAccId(),
+                        transferRequest.getCurrency(), transferRequest.getAmount()
+                );
+                result = jsonParser.writeValueAsString(transferResult);
+            } else if(request instanceof CreateAccountRequest) {
+                CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
+                result = application.createTestAccount().getId().toString();
+            } else {
+                result = "Unsupported request type:" + request.getClass().getName();
             }
         } catch (IOException e) {
             result = e.getMessage();
