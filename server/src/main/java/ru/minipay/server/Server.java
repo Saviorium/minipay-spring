@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
-import ru.minipay.api.CreateAccountRequest;
-import ru.minipay.api.FundTransferRequest;
-import ru.minipay.api.FundTransferResult;
-import ru.minipay.api.Request;
+import ru.minipay.api.*;
 import ru.minipay.model.*;
 
 import java.io.*;
@@ -54,14 +51,15 @@ public class Server {
             Request request = jsonParser.readValue(requestStr, Request.class);
             if(request instanceof FundTransferRequest) {
                 FundTransferRequest transferRequest = jsonParser.readValue(requestStr, FundTransferRequest.class);
-                FundTransferResult transferResult = application.makeTransfer(
+                FundTransferResponse transferResult = application.makeTransfer(
                         transferRequest.getFromAccId(), transferRequest.getToAccId(),
-                        transferRequest.getCurrency(), transferRequest.getAmount()
-                );
+                        transferRequest.getCurrency(), transferRequest.getAmount());
                 result = jsonParser.writeValueAsString(transferResult);
             } else if(request instanceof CreateAccountRequest) {
                 CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
-                result = application.createTestAccount().getId().toString();
+                Account acc = application.createTestAccount(); //TODO: create real accounts here
+                CreateAccountResponse response = new CreateAccountResponse(true, acc.getId(), "");
+                result = jsonParser.writeValueAsString(response);
             } else {
                 result = "Unsupported request type:" + request.getClass().getName();
             }

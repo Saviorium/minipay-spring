@@ -6,7 +6,7 @@ import ru.minipay.dao.AccountDao;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
-import ru.minipay.api.FundTransferResult;
+import ru.minipay.api.FundTransferResponse;
 import ru.minipay.model.SampleAccountGenerator;
 
 import java.math.BigDecimal;
@@ -44,7 +44,7 @@ public class FundTransferServiceTest {
         Account acc2 = accGen.getTestAccount(Currency.RUB);
         acc2.setBalance(100L);
 
-        FundTransferResult result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
+        FundTransferResponse result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(50L));
         Assert.assertFalse(result.isSuccess());
     }
 
@@ -57,7 +57,7 @@ public class FundTransferServiceTest {
         acc2.setBalance(100L);
         dao.insert(acc2);
 
-        FundTransferResult result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(101L));
+        FundTransferResponse result = transferService.makeTransfer(acc1.getId(), acc2.getId(), Currency.RUB, BigDecimal.valueOf(101L));
         Assert.assertFalse(result.isSuccess());
         Assert.assertEquals("Check balance unchanged in dao",
                 BigDecimal.valueOf(100L), dao.getById(acc1.getId()).getBalance());

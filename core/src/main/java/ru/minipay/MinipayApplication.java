@@ -3,7 +3,7 @@ package ru.minipay;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.model.User;
-import ru.minipay.api.FundTransferResult;
+import ru.minipay.api.FundTransferResponse;
 import ru.minipay.service.FundTransferService;
 import ru.minipay.service.UserAccountsService;
 
@@ -41,7 +41,7 @@ public class MinipayApplication {
         return new User("Клиент", "Тестовый", rnd.nextBoolean()? Gender.MALE:Gender.FEMALE, randomDate);
     }
 
-    public FundTransferResult makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
+    public FundTransferResponse makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
         return fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
 }

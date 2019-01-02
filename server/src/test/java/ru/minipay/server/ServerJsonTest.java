@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.minipay.model.Account;
 import ru.minipay.model.SampleAccountGenerator;
-import ru.minipay.api.FundTransferResult;
+import ru.minipay.api.FundTransferResponse;
 
 public class ServerJsonTest {
     private final static SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
@@ -24,9 +24,9 @@ public class ServerJsonTest {
     @Test
     public void testFundTransferResultJson() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        FundTransferResult result = new FundTransferResult(true, "Message");
+        FundTransferResponse result = new FundTransferResponse(true, "Message");
         String json = objectMapper.writeValueAsString(result);
-        FundTransferResult parsedResult = objectMapper.readValue(json, FundTransferResult.class);
+        FundTransferResponse parsedResult = objectMapper.readValue(json, FundTransferResponse.class);
         Assert.assertEquals(result.isSuccess(), parsedResult.isSuccess());
         Assert.assertEquals(result.getMessage(), parsedResult.getMessage());
     }

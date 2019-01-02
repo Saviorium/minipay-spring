@@ -1,19 +1,19 @@
 package ru.minipay.api;
 
-public class FundTransferResult {
+public class FundTransferResponse {
     private final boolean success;
     private final String message;
 
-    public FundTransferResult(boolean success, String message) {
+    public FundTransferResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public FundTransferResult(boolean success) {
+    public FundTransferResponse(boolean success) {
         this(success, "");
     }
 
-    private FundTransferResult() {
+    private FundTransferResponse() {
         this(true, "");
     }
 
