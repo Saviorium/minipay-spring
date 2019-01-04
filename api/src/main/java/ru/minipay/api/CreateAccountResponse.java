@@ -2,7 +2,7 @@ package ru.minipay.api;
 
 import java.util.UUID;
 
-public class CreateAccountResponse {
+public class CreateAccountResponse implements Response{
     private final boolean success;
     private final UUID uuid;
     private final String message;
@@ -11,6 +11,12 @@ public class CreateAccountResponse {
         this.success = success;
         this.uuid = uuid;
         this.message = message;
+    }
+
+    public CreateAccountResponse() {
+        this.success = false;
+        this.uuid = null;
+        this.message = null;
     }
 
     public boolean isSuccess() {
@@ -23,5 +29,14 @@ public class CreateAccountResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateAccountResponse{" +
+                "success=" + success +
+                ", uuid=" + uuid +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

@@ -34,11 +34,12 @@ public class Server {
                              new InputStreamReader(connection.getInputStream()))
                      ) {
                     String request = in.readLine();
+                    System.out.println("Got request: " + request);
                     String result = process(request);
+                    System.out.println("Sending response: " + result);
                     out.write(result);
                     out.flush();
                 }
-                System.out.println(acc1 + "\n\r" + acc2);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

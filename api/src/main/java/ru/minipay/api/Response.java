@@ -9,6 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FundTransferResponse.class, name = "FundTransfer"),
-        @JsonSubTypes.Type(value = CreateAccountRequest.class, name = "CreateAccount")
+        @JsonSubTypes.Type(value = CreateAccountResponse.class, name = "CreateAccount")
 })
 public interface Response {}

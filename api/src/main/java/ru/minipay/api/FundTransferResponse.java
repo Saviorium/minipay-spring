@@ -1,6 +1,6 @@
 package ru.minipay.api;
 
-public class FundTransferResponse {
+public class FundTransferResponse implements Response {
     private final boolean success;
     private final String message;
 
