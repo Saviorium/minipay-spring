@@ -27,6 +27,9 @@ public class FundTransferResponse implements Response {
 
     @Override
     public String toString() {
-        return success?"Success":"Failure" + "! Message: " + message;
+        return "FundTransferResponse{" +
+                "success=" + success +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

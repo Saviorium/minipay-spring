@@ -12,46 +12,46 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class ClientThread implements Runnable {
+public class ClientMultiThread implements Runnable {
     private final String hostName;
     private final int port;
     private final ObjectMapper jsonParser = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-    private List<Request> tasks = new LinkedList<>();
-    private List<RequestResponsePair> results = new LinkedList<>();
-    private final Thread thread;
-    private volatile boolean isRunning;
+    private LinkedBlockingQueue<Request> tasks = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<RequestResponsePair> results = new LinkedBlockingQueue<>();
+    private static final int NTHREADS = 10;
+    private final Executor exec = Executors.newFixedThreadPool(NTHREADS);
+    private volatile boolean isRunning = false;
 
 
-    public ClientThread(String hostName, int port) {
+    public ClientMultiThread(String hostName, int port) {
         this.hostName = hostName;
         this.port = port;
-        thread = new Thread(this);
-        isRunning = false;
     }
 
-    public void addRequest(Request request) {
-        if(isRunning) throw new IllegalStateException();
-        tasks.add(request);
+    public boolean addRequest(Request request) {
+        return tasks.offer(request);
     }
 
-    public List<RequestResponsePair> getResults() {
-        if(isRunning) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return results;
+    public RequestResponsePair getNextResult() throws InterruptedException {
+        return results.take();
     }
 
     public void sendRequests() {
         isRunning = true;
-        thread.start();
+        exec.execute(this);
+    }
+
+    public int getResultsNum() {
+        return results.size();
+    }
+
+    public void shutdown() {
+        isRunning = false;
     }
 
     private Response send(Request request) {
@@ -80,10 +80,14 @@ public class ClientThread implements Runnable {
 
     @Override
     public void run() {
-        for (Request request: tasks) {
-            Response response = send(request);
-            results.add(new RequestResponsePair(request, response));
+        while (isRunning) {
+            try {
+                Request request = tasks.take();
+                Response response = send(request);
+                results.add(new RequestResponsePair(request, response));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        isRunning = false;
     }
 }
