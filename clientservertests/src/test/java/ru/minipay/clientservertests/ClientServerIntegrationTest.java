@@ -1,8 +1,11 @@
-package ru.minipay.client;
+package ru.minipay.clientservertests;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.minipay.api.*;
+import ru.minipay.client.ClientMultiThread;
+import ru.minipay.server.Server;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,7 +13,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ClientMultiThreadTest {
+public class ClientServerIntegrationTest {
+    @BeforeClass
+    public static void setUp() {
+        Server.main(null);
+    }
+
     @Test
     public void TestClientThreadSingleRequest() throws InterruptedException {
         Request request = new CreateAccountRequest();

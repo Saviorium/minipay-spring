@@ -13,6 +13,7 @@
         <module>client</module>
         <module>core</module>
         <module>api</module>
+        <module>clientservertests</module>
     </modules>
 
     <properties>
