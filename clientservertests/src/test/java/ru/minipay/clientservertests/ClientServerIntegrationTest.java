@@ -6,6 +6,8 @@ import org.junit.Test;
 import ru.minipay.api.*;
 import ru.minipay.client.ClientMultiThread;
 import ru.minipay.server.Server;
+import ru.minipay.server.ServerMultiThread;
+import ru.minipay.server.ServerThreadPool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,9 +16,11 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ClientServerIntegrationTest {
+    private static final Server server = new ServerThreadPool();
+
     @BeforeClass
     public static void setUp() {
-        Server.main(null);
+        server.start();
     }
 
     @Test

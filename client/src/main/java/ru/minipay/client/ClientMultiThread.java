@@ -38,11 +38,8 @@ public class ClientMultiThread {
     }
 
     public void awaitTermination() throws InterruptedException {
-        exec.awaitTermination(0L, TimeUnit.MILLISECONDS);
-    }
-
-    public void shutdown() {
         exec.shutdown();
+        exec.awaitTermination(10L, TimeUnit.SECONDS);
     }
 
     private Response send(Request request) {

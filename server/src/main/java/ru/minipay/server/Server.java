@@ -26,9 +26,6 @@ public class Server implements Runnable {
     }
 
     public Server() {
-        Account acc1 = application.createTestAccount();
-        Account acc2 = application.createTestAccount();
-        System.out.println(acc1 + "\n\r" + acc2);
         jsonParser.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         thread = new Thread(this);
     }
@@ -41,22 +38,25 @@ public class Server implements Runnable {
     public void run() {
         try (ServerSocket server = new ServerSocket(port)) {
             while(true) {
-                try (Socket connection = server.accept();
-                     PrintWriter out =
-                             new PrintWriter(connection.getOutputStream(), true);
-                     BufferedReader in = new BufferedReader(
-                             new InputStreamReader(connection.getInputStream()))
-                ) {
-                    String request = in.readLine();
-                    System.out.println("Got request: " + request);
-                    String result = process(request);
-                    System.out.println("Sending response: " + result);
-                    out.write(result);
-                    out.flush();
-                }
+                Socket connection = server.accept();
+                handleConnection(connection);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    void handleConnection(Socket conn) throws IOException {
+        try (conn; PrintWriter out =
+                new PrintWriter(conn.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(
+                     new InputStreamReader(conn.getInputStream()))) {
+            String request = in.readLine();
+            //System.out.println("Got request: " + request);
+            String result = process(request);
+            //System.out.println("Sending response: " + result);
+            out.write(result);
+            out.flush();
         }
     }
 
@@ -80,6 +80,11 @@ public class Server implements Runnable {
             result = jsonParser.writeValueAsString(response);
         } catch (IOException e) {
             result = e.getMessage();
+        }
+        try {
+            Thread.sleep(10); //TODO: for tests - remove later
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return result;
     }
