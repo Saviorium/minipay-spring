@@ -16,7 +16,6 @@ public class ClientMultiThreadTest {
         Request request = new CreateAccountRequest();
         ClientMultiThread clientThread = new ClientMultiThread("127.0.0.1", 12345);
         clientThread.addRequest(request);
-        clientThread.sendRequests();
         RequestResponsePair result = clientThread.getNextResult();
         CreateAccountResponse response = (CreateAccountResponse) result.getResponse();
         Assert.assertTrue(response.isSuccess());
@@ -28,7 +27,6 @@ public class ClientMultiThreadTest {
         Request request = new CreateAccountRequest();
         clientThread.addRequest(request);
         clientThread.addRequest(request);
-        clientThread.sendRequests();
         CreateAccountResponse responseAcc = (CreateAccountResponse) clientThread.getNextResult().getResponse();
         Assert.assertTrue(responseAcc.isSuccess());
         UUID acc1 = responseAcc.getUuid();
@@ -45,7 +43,6 @@ public class ClientMultiThreadTest {
     @Test
     public void TestRandom1000Requests() throws InterruptedException {
         ClientMultiThread clientThread = new ClientMultiThread("127.0.0.1", 12345);
-        clientThread.sendRequests();
         //generate users
         final int usersNum = 100;
         List<UUID> users = new ArrayList<>();
@@ -67,11 +64,9 @@ public class ClientMultiThreadTest {
             clientThread.addRequest(request);
         }
         //wait until got all responses
-        int sentReq;
-        do {
-            sentReq = clientThread.getResultsNum();
-        } while (sentReq < reqNum);
+        clientThread.awaitTermination();
         time = System.nanoTime() - time;
+
         System.out.println("Sent " + reqNum + " requests in " + time/1000000D + " ms");
         for(int i = 0; i<reqNum; i++) {
             FundTransferResponse responseTransfer = (FundTransferResponse) clientThread.getNextResult().getResponse();

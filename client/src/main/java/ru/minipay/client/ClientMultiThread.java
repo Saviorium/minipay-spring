@@ -12,20 +12,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
-public class ClientMultiThread implements Runnable {
+public class ClientMultiThread {
     private final String hostName;
     private final int port;
     private final ObjectMapper jsonParser = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-    private LinkedBlockingQueue<Request> tasks = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<RequestResponsePair> results = new LinkedBlockingQueue<>();
     private static final int NTHREADS = 10;
-    private final Executor exec = Executors.newFixedThreadPool(NTHREADS);
-    private volatile boolean isRunning = false;
+    private final ExecutorService exec = new ThreadPoolExecutor(NTHREADS, NTHREADS, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
 
     public ClientMultiThread(String hostName, int port) {
@@ -33,25 +29,20 @@ public class ClientMultiThread implements Runnable {
         this.port = port;
     }
 
-    public boolean addRequest(Request request) {
-        return tasks.offer(request);
+    public void addRequest(Request request) {
+        exec.execute(new ClientThread(request));
     }
 
     public RequestResponsePair getNextResult() throws InterruptedException {
         return results.take();
     }
 
-    public void sendRequests() {
-        isRunning = true;
-        exec.execute(this);
-    }
-
-    public int getResultsNum() {
-        return results.size();
+    public void awaitTermination() throws InterruptedException {
+        exec.awaitTermination(0L, TimeUnit.MILLISECONDS);
     }
 
     public void shutdown() {
-        isRunning = false;
+        exec.shutdown();
     }
 
     private Response send(Request request) {
@@ -78,16 +69,18 @@ public class ClientMultiThread implements Runnable {
         return response;
     }
 
-    @Override
-    public void run() {
-        while (isRunning) {
-            try {
-                Request request = tasks.take();
-                Response response = send(request);
-                results.add(new RequestResponsePair(request, response));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private class ClientThread implements Runnable {
+        private final Request request;
+
+        private ClientThread(Request request) {
+            this.request = request;
+        }
+
+        @Override
+        public void run() {
+            Response response = send(request);
+            results.add(new RequestResponsePair(request, response));
         }
     }
+
 }
