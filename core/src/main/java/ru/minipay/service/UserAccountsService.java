@@ -6,6 +6,7 @@ import ru.minipay.api.Currency;
 import ru.minipay.model.User;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class UserAccountsService {
     private final AccountDao dao;
@@ -19,5 +20,9 @@ public class UserAccountsService {
         account.setBalance(initBalance);
         dao.insert(account);
         return account;
+    }
+
+    public Account getAccount(UUID accId) {
+        return dao.getById(accId);
     }
 }

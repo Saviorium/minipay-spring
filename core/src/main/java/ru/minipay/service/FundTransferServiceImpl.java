@@ -18,7 +18,7 @@ public class FundTransferServiceImpl implements FundTransferService{
     }
 
     @Override
-    public FundTransferResponse makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) {
+    public synchronized FundTransferResponse makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) { //TODO: better concurrency
         Account from = dao.getById(fromId);
         Account to = dao.getById(toId);
         if(from == null || to == null) {

@@ -85,4 +85,56 @@ public class ClientServerIntegrationTest {
             Assert.assertTrue(responseTransfer.isSuccess());
         }
     }
+
+    @Test
+    public void TestGetBalanceResponse() throws InterruptedException {
+        ClientMultiThread client = new ClientMultiThread("127.0.0.1", 12345);
+        Request request = new CreateAccountRequest();
+        client.addRequest(request);
+        CreateAccountResponse responseAcc = (CreateAccountResponse) client.getNextResult().getResponse();
+        UUID acc = responseAcc.getUuid();
+        request = new GetBalanceRequest(acc);
+        client.addRequest(request);
+        GetBalanceResponse balanceResponse = (GetBalanceResponse) client.getNextResult().getResponse();
+        Assert.assertEquals(BigDecimal.valueOf(100L), balanceResponse.getBalance());
+    }
+
+    @Test
+    public void TestFundTransferConcurrency() throws InterruptedException {
+        ClientMultiThread client = new ClientMultiThread("127.0.0.1", 12345);
+        final int usersNum = 2;
+        final int initialBalance = 100;
+        UUID[] users = new UUID[usersNum];
+        for(int i = 0; i<usersNum; i++) {
+            Request request = new CreateAccountRequest();
+            client.addRequest(request);
+            CreateAccountResponse responseAcc = (CreateAccountResponse) client.getNextResult().getResponse();
+            users[i] = responseAcc.getUuid();
+        }
+        final int reqNum = 1000;
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        int[] expectedBalance = new int[usersNum];
+        for (int i = 0; i < usersNum; i++) {
+            expectedBalance[i] = initialBalance;
+        }
+        for(int i = 0; i<reqNum; i++) {
+            int from = rnd.nextInt(usersNum);
+            int to = rnd.nextInt(usersNum);
+            Request request = new FundTransferRequest(
+                    users[from],
+                    users[to],
+                    Currency.RUB, BigDecimal.ONE);
+            client.addRequest(request);
+            expectedBalance[from]--;
+            expectedBalance[to]++;
+        }
+        client.awaitTermination();
+        client = new ClientMultiThread("127.0.0.1", 12345);
+        for(int i = 0; i<usersNum; i++) {
+            Request request = new GetBalanceRequest(users[i]);
+            client.addRequest(request);
+            GetBalanceResponse balanceResponse = (GetBalanceResponse) client.getNextResult().getResponse();
+            Assert.assertEquals(expectedBalance[i], balanceResponse.getBalance().intValue());
+        }
+    }
 }

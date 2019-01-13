@@ -44,4 +44,8 @@ public class MinipayApplication {
     public FundTransferResponse makeTransfer(UUID fromAccId, UUID toAccId, Currency currency, BigDecimal amount) {
         return fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
+
+    public Account getAccount(UUID accId) {
+        return userAccountsService.getAccount(accId);
+    }
 }

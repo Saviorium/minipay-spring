@@ -74,6 +74,10 @@ public class Server implements Runnable {
                 CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
                 Account acc = application.createTestAccount(); //TODO: create real accounts here
                 response = new CreateAccountResponse(true, acc.getId(), "");
+            } else if(request instanceof GetBalanceRequest) {
+                GetBalanceRequest getBalanceRequest = jsonParser.readValue(requestStr, GetBalanceRequest.class);
+                Account acc = application.getAccount(getBalanceRequest.getAccId());
+                response = new GetBalanceResponse(acc.getBalance(), acc.getCurrency());
             } else {
                 response = new ErrorResponse(false, "Unsupported request type:" + request.getClass().getName());
             }
@@ -82,7 +86,7 @@ public class Server implements Runnable {
             result = e.getMessage();
         }
         try {
-            Thread.sleep(10); //TODO: for tests - remove later
+            Thread.sleep(1); //TODO: for tests - remove later
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
