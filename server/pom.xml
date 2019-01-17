@@ -3,25 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>Minipay</artifactId>
+        <artifactId>minipay</artifactId>
         <groupId>ru.minipay</groupId>
         <version>0.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <maven-jar-plugin.mainClass>Server</maven-jar-plugin.mainClass>
+    </properties>
 
     <artifactId>server</artifactId>
     <dependencies>
         <dependency>
             <groupId>ru.minipay</groupId>
             <artifactId>core</artifactId>
-            <version>0.1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.minipay</groupId>
             <artifactId>core</artifactId>
-            <version>0.1.0</version>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 
@@ -30,33 +38,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ru.minipay.server.Server</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${project.build.directory}/lib
-                            </outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
