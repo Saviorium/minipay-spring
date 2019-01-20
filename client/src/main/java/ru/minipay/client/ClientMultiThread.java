@@ -21,8 +21,13 @@ public class ClientMultiThread {
             .registerModule(new JavaTimeModule());
     private LinkedBlockingQueue<RequestResponsePair> results = new LinkedBlockingQueue<>();
     private static final int NTHREADS = 10;
-    private final ExecutorService exec = new ThreadPoolExecutor(NTHREADS, NTHREADS, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+    private final ExecutorService exec = Executors.newFixedThreadPool(NTHREADS);
 
+    private final static int DEFAULT_PORT = 12345;
+
+    public ClientMultiThread(String hostName) {
+        this(hostName, DEFAULT_PORT);
+    }
 
     public ClientMultiThread(String hostName, int port) {
         this.hostName = hostName;
@@ -30,7 +35,7 @@ public class ClientMultiThread {
     }
 
     public void addRequest(Request request) {
-        exec.execute(new ClientThread(request));
+        exec.execute(new ClientWorker(request));
     }
 
     public RequestResponsePair getNextResult() throws InterruptedException {
@@ -66,10 +71,10 @@ public class ClientMultiThread {
         return response;
     }
 
-    private class ClientThread implements Runnable {
+    private class ClientWorker implements Runnable {
         private final Request request;
 
-        private ClientThread(Request request) {
+        private ClientWorker(Request request) {
             this.request = request;
         }
 

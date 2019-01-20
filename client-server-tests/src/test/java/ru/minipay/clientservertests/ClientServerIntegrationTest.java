@@ -17,6 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ClientServerIntegrationTest {
     private static final Server server = new ServerThreadPool();
+    private static final String serverIP = "127.0.0.1";
 
     @BeforeClass
     public static void setUp() {
@@ -26,7 +27,7 @@ public class ClientServerIntegrationTest {
     @Test
     public void TestClientThreadSingleRequest() throws InterruptedException {
         Request request = new CreateAccountRequest();
-        ClientMultiThread clientThread = new ClientMultiThread("127.0.0.1", 12345);
+        ClientMultiThread clientThread = new ClientMultiThread(serverIP);
         clientThread.addRequest(request);
         RequestResponsePair result = clientThread.getNextResult();
         CreateAccountResponse response = (CreateAccountResponse) result.getResponse();
@@ -35,7 +36,7 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void TestClientThreadTransferRequest() throws InterruptedException {
-        ClientMultiThread clientThread = new ClientMultiThread("127.0.0.1", 12345);
+        ClientMultiThread clientThread = new ClientMultiThread(serverIP);
         Request request = new CreateAccountRequest();
         clientThread.addRequest(request);
         clientThread.addRequest(request);
@@ -50,11 +51,21 @@ public class ClientServerIntegrationTest {
         clientThread.addRequest(request);
         FundTransferResponse responseTransfer = (FundTransferResponse) clientThread.getNextResult().getResponse();
         Assert.assertTrue(responseTransfer.isSuccess());
+
+        request = new GetBalanceRequest(acc1);
+        clientThread.addRequest(request);
+        GetBalanceResponse balanceResponse = (GetBalanceResponse) clientThread.getNextResult().getResponse();
+        Assert.assertEquals(99, balanceResponse.getBalance().intValue());
+
+        request = new GetBalanceRequest(acc2);
+        clientThread.addRequest(request);
+        balanceResponse = (GetBalanceResponse) clientThread.getNextResult().getResponse();
+        Assert.assertEquals(101, balanceResponse.getBalance().intValue());
     }
 
     @Test
     public void TestRandom1000Requests() throws InterruptedException {
-        ClientMultiThread clientThread = new ClientMultiThread("127.0.0.1", 12345);
+        ClientMultiThread clientThread = new ClientMultiThread(serverIP);
         //generate users
         final int usersNum = 100;
         List<UUID> users = new ArrayList<>();
@@ -88,7 +99,7 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void TestGetBalanceResponse() throws InterruptedException {
-        ClientMultiThread client = new ClientMultiThread("127.0.0.1", 12345);
+        ClientMultiThread client = new ClientMultiThread(serverIP);
         Request request = new CreateAccountRequest();
         client.addRequest(request);
         CreateAccountResponse responseAcc = (CreateAccountResponse) client.getNextResult().getResponse();
@@ -101,7 +112,7 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void TestFundTransferConcurrency() throws InterruptedException {
-        ClientMultiThread client = new ClientMultiThread("127.0.0.1", 12345);
+        ClientMultiThread client = new ClientMultiThread(serverIP);
         final int usersNum = 2;
         final int initialBalance = 100;
         UUID[] users = new UUID[usersNum];
@@ -129,7 +140,7 @@ public class ClientServerIntegrationTest {
             expectedBalance[to]++;
         }
         client.awaitTermination();
-        client = new ClientMultiThread("127.0.0.1", 12345);
+        client = new ClientMultiThread(serverIP);
         for(int i = 0; i<usersNum; i++) {
             Request request = new GetBalanceRequest(users[i]);
             client.addRequest(request);
