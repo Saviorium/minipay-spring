@@ -1,6 +1,6 @@
 package ru.minipay.api;
 
-public class ErrorResponse implements Response {
+public class ErrorResponse extends Response {
     private final boolean success;
     private final String message;
 

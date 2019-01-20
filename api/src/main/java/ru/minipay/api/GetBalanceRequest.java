@@ -2,7 +2,7 @@ package ru.minipay.api;
 
 import java.util.UUID;
 
-public class GetBalanceRequest implements Request {
+public class GetBalanceRequest extends Request {
     private final UUID accId;
 
     public GetBalanceRequest(UUID accId) {

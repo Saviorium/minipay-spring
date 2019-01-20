@@ -3,7 +3,7 @@ package ru.minipay.api;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class FundTransferRequest implements Request{
+public class FundTransferRequest extends Request{
     private final UUID fromAccId;
     private final UUID toAccId;
     private final Currency currency;

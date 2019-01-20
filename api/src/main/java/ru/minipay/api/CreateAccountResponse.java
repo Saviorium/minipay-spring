@@ -2,7 +2,7 @@ package ru.minipay.api;
 
 import java.util.UUID;
 
-public class CreateAccountResponse implements Response{
+public class CreateAccountResponse extends Response{
     private final boolean success;
     private final UUID uuid;
     private final String message;

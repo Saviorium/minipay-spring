@@ -12,4 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = CreateAccountRequest.class, name = "CreateAccount"),
         @JsonSubTypes.Type(value = GetBalanceRequest.class, name = "GetBalance")
 })
-public interface Request {}
+public class Request {
+
+}

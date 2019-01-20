@@ -2,16 +2,17 @@ package ru.minipay.api;
 
 import java.math.BigDecimal;
 
-public class GetBalanceResponse implements Response {
+public class GetBalanceResponse extends Response {
     private final BigDecimal balance;
     private final Currency currency;
 
     public GetBalanceResponse(BigDecimal balance, Currency currency) {
+        super(true, "");
         this.balance = balance;
         this.currency = currency;
     }
 
-    public GetBalanceResponse() {
+    GetBalanceResponse() {
         this.balance = null;
         this.currency = null;
     }
