@@ -2,16 +2,19 @@ package ru.minipay.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import ru.minipay.api.RequestType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
-public class Client {
+import ru.minipay.api.*;
+
+public class ClientConsole {
     private static final ObjectMapper jsonParser = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
@@ -36,41 +39,51 @@ public class Client {
                         new BufferedReader(
                                 new InputStreamReader(System.in))
         ) {
-            RequestType requestType = getRequestType(stdIn);
-
-            if (requestType == RequestType.CreateAccount) {
-                out.println("{\"type\":\"CreateAccount\"}");
-            } else if (requestType == RequestType.FundTransfer) {
-                StringBuilder requestStr = new StringBuilder("{\"type\":\"FundTransfer\",\"fromAccId\":\"");
-                System.out.println("Enter id from:");
-                requestStr.append(stdIn.readLine()).append("\",\"toAccId\":\"");
-                System.out.println("Enter id to:");
-                requestStr.append(stdIn.readLine()).append("\",\"currency\":\"RUB\",\"amount\":");
-                System.out.println("Enter amount RUB:");
-                requestStr.append(stdIn.readLine()).append("}");
-                System.out.println(requestStr);
-                out.println(requestStr);
+            Request request = getRequest(stdIn);
+            if(request != null) {
+                out.println(jsonParser.writeValueAsString(request));
+                String response = in.readLine();
+                System.out.println("Server: " + response);
             }
-            String response = in.readLine();
-            System.out.println("Server: " + response);
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                    hostName);
+            System.err.println("I/O Exception: " +
+                    e.getMessage());
             System.exit(1);
         }
     }
 
-    private static RequestType getRequestType(BufferedReader stdIn) throws IOException {
-        System.out.println("Enter request type (1 - create account, 2 - fund transfer):");
+    private static Request getRequest(BufferedReader stdIn) throws IOException {
+        System.out.println("Enter request type (1 - create account, 2 - fund transfer, 3 - get balance):");
         int userInput = Integer.parseInt(stdIn.readLine());
         switch (userInput) {
-            case 1: { return RequestType.CreateAccount; }
-            case 2: { return RequestType.FundTransfer; }
+            case 1: { return getCreateAccountRequest(stdIn); }
+            case 2: { return getFundTransferRequest(stdIn); }
+            case 3: { return getGetBalanceRequest(stdIn); }
             default: { System.out.println("Error: unsupported request type: " + userInput); }
         }
         return null;
+    }
+
+    private static Request getGetBalanceRequest(BufferedReader stdIn) throws IOException {
+        System.out.println("Enter id:");
+        UUID id = UUID.fromString(stdIn.readLine());
+        return new GetBalanceRequest(id);
+    }
+
+    private static Request getFundTransferRequest(BufferedReader stdIn) throws IOException {
+        System.out.println("Enter id from:");
+        UUID idFrom = UUID.fromString(stdIn.readLine());
+        System.out.println("Enter id to:");
+        UUID idTo = UUID.fromString(stdIn.readLine());
+        System.out.println("Enter amount RUB:");
+        BigDecimal amount = new BigDecimal(stdIn.readLine());
+        return new FundTransferRequest(idFrom, idTo, Currency.RUB, amount);
+    }
+
+    private static Request getCreateAccountRequest(BufferedReader stdIn) {
+        return new CreateAccountRequest();
     }
 }
