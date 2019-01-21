@@ -3,6 +3,7 @@ package ru.minipay.server;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.logging.log4j.*;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
 import ru.minipay.api.*;
@@ -52,9 +53,9 @@ public class Server implements Runnable {
              BufferedReader in = new BufferedReader(
                      new InputStreamReader(conn.getInputStream()))) {
             String request = in.readLine();
-            //System.out.println("Got request: " + request);
+            LogManager.getLogger().info("Got request: " + request);
             String result = process(request);
-            //System.out.println("Sending response: " + result);
+            LogManager.getLogger().info("Sending response: " + result);
             out.write(result);
             out.flush();
         }
