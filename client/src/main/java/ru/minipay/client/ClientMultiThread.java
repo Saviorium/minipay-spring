@@ -3,7 +3,6 @@ package ru.minipay.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.minipay.api.Request;
-import ru.minipay.api.RequestResponsePair;
 import ru.minipay.api.Response;
 
 import java.io.BufferedReader;
@@ -19,7 +18,6 @@ public class ClientMultiThread {
     private final int port;
     private final ObjectMapper jsonParser = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-    private LinkedBlockingQueue<RequestResponsePair> results = new LinkedBlockingQueue<>();
     private static final int NTHREADS = 10;
     private final ExecutorService exec = Executors.newFixedThreadPool(NTHREADS);
 
@@ -34,12 +32,8 @@ public class ClientMultiThread {
         this.port = port;
     }
 
-    public void addRequest(Request request) {
-        exec.execute(new ClientWorker(request));
-    }
-
-    public RequestResponsePair getNextResult() throws InterruptedException {
-        return results.take();
+    public Future<Response> addRequest(Request request) {
+        return exec.submit(new ClientWorker(request));
     }
 
     public void awaitTermination() throws InterruptedException {
@@ -71,7 +65,7 @@ public class ClientMultiThread {
         return response;
     }
 
-    private class ClientWorker implements Runnable {
+    private class ClientWorker implements Callable<Response> {
         private final Request request;
 
         private ClientWorker(Request request) {
@@ -79,9 +73,8 @@ public class ClientMultiThread {
         }
 
         @Override
-        public void run() {
-            Response response = send(request);
-            results.add(new RequestResponsePair(request, response));
+        public Response call() {
+            return send(request);
         }
     }
 
