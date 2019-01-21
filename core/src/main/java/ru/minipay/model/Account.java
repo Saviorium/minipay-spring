@@ -11,6 +11,7 @@ public class Account{
     private final UUID id;
     private final Currency currency;
     private final Instant created;
+    private Instant lastChanged;
     private final User user;
     private BigDecimal balance;
 
@@ -19,7 +20,17 @@ public class Account{
         this.currency = currency;
         this.id = UUID.randomUUID();
         this.created = Instant.now();
+        this.lastChanged = this.created;
         this.balance = new BigDecimal(0);
+    }
+
+    public Account(Account account) {
+        this.id = account.id;
+        this.currency = account.currency;
+        this.created = account.created;
+        this.lastChanged = account.lastChanged;
+        this.user = account.user;
+        this.balance = account.balance;
     }
 
     private Account() { //for jackson deserialization
@@ -55,6 +66,18 @@ public class Account{
 
     public Currency getCurrency() {
         return currency;
+    }
+
+    public Instant getLastChanged() {
+        return lastChanged;
+    }
+
+    public void updateLastChanged() {
+        lastChanged = Instant.now();
+    }
+
+    public boolean isChangedAfter(Account acc) {
+        return this.lastChanged.isAfter(acc.lastChanged);
     }
 
     @Override

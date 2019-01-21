@@ -3,6 +3,8 @@ package ru.minipay.model;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 public class AccountTest {
     private final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
 
@@ -17,5 +19,15 @@ public class AccountTest {
         Assert.assertNotEquals(a1, a2);
         a2 = a1;
         Assert.assertEquals(a1, a2);
+    }
+
+    @Test
+    public void testAccountCopyConstructor() {
+        Account a1 = accGen.getTestAccount();
+        a1.setBalance(100L);
+        Account a2 = new Account(a1);
+        a2.setBalance(200L);
+        Assert.assertEquals(BigDecimal.valueOf(100L), a1.getBalance());
+        Assert.assertEquals(BigDecimal.valueOf(200L), a2.getBalance());
     }
 }
