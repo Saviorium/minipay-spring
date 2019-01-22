@@ -110,7 +110,7 @@ public class ClientServerIntegrationTest {
     @Test
     public void TestFundTransferConcurrency() throws InterruptedException, ExecutionException {
         ClientMultiThread client = new ClientMultiThread(serverIP);
-        final int usersNum = 5;
+        final int usersNum = 2;
         final int initialBalance = 100;
         //users generation
         UUID[] users = new UUID[usersNum];

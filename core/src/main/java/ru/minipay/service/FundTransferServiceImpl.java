@@ -20,6 +20,9 @@ public class FundTransferServiceImpl implements FundTransferService{
 
     @Override
     public FundTransferResponse makeTransfer(UUID fromId, UUID toId, Currency currency, BigDecimal amount) {
+        if(fromId.equals(toId)) {
+            return new FundTransferResponse(false, "From and To accounts are the same");
+        }
         Account from = dao.getById(fromId);
         Account to = dao.getById(toId);
         if(from == null || to == null) {
@@ -52,6 +55,8 @@ public class FundTransferServiceImpl implements FundTransferService{
                 //throw new IllegalStateException("Funds are subtracted from " + fromId + " but didn't returned!");
             }
         }
-        return new FundTransferResponse(true);
+        return new FundTransferResponse(true,
+                "Sent " + amount + " from " + fromId + "(" + from.getBalance() + ")"
+                        + " to " + toId + "(" + to.getBalance());
     }
 }

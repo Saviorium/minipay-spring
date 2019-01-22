@@ -11,7 +11,7 @@ public class Account{
     private final UUID id;
     private final Currency currency;
     private final Instant created;
-    private Instant lastChanged;
+    private long lastChanged;
     private final User user;
     private BigDecimal balance;
 
@@ -20,7 +20,7 @@ public class Account{
         this.currency = currency;
         this.id = UUID.randomUUID();
         this.created = Instant.now();
-        this.lastChanged = this.created;
+        this.lastChanged = 0;
         this.balance = new BigDecimal(0);
     }
 
@@ -68,16 +68,12 @@ public class Account{
         return currency;
     }
 
-    public Instant getLastChanged() {
-        return lastChanged;
-    }
-
     public void updateLastChanged() {
-        lastChanged = Instant.now();
+        lastChanged++;
     }
 
     public boolean isChangedAfter(Account acc) {
-        return this.lastChanged.isAfter(acc.lastChanged);
+        return this.lastChanged > acc.lastChanged;
     }
 
     @Override
