@@ -19,7 +19,7 @@ public class UserAccountsService {
         Account account = new Account(user, currency);
         account.setBalance(initBalance);
         dao.insert(account);
-        return account;
+        return dao.getById(account.getId());
     }
 
     public Account getAccount(UUID accId) {

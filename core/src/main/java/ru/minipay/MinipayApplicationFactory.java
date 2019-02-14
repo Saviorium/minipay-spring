@@ -1,6 +1,8 @@
 package ru.minipay;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import ru.minipay.dao.AccountDao;
+import ru.minipay.dao.AccountDaoDbImpl;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
 import ru.minipay.api.Currency;
 import ru.minipay.service.FundExchangeService;
@@ -22,15 +24,34 @@ public class MinipayApplicationFactory {
     }
 
     public MinipayApplication createApplication() {
-        AccountDao dao = new AccountDaoInMemoryImpl();
+        //AccountDao dao = new AccountDaoInMemoryImpl();
+        AccountDao dao = getDbAccountDao();
         UserAccountsService userAccountsService = new UserAccountsService(dao);
 
+        FundExchangeService exchangeService = getExchangeService();
+
+        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(dao, exchangeService));
+    }
+
+    private AccountDao getDbAccountDao() {
+        BasicDataSource ds = new BasicDataSource();
+
+        ds.setDriverClassName("org.postgresql.Driver");
+        ds.setUrl("jdbc:postgresql://localhost/minipay");
+        ds.setUsername("minipay");
+        ds.setPassword("sVWneZ4eA");
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
+
+        return new AccountDaoDbImpl(ds);
+    }
+
+    private FundExchangeService getExchangeService() {
         Map<Currency, BigDecimal> exchangeRate = new HashMap<>();
         exchangeRate.put(Currency.RUB, BigDecimal.ONE);
         exchangeRate.put(Currency.USD, new BigDecimal("65.6"));
         exchangeRate.put(Currency.EUR, new BigDecimal("74.8"));
-        FundExchangeService exchangeService = new FundExchangeServiceLocalImpl(exchangeRate);
-
-        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(dao, exchangeService));
+        return new FundExchangeServiceLocalImpl(exchangeRate);
     }
 }

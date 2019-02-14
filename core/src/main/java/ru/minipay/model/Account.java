@@ -24,6 +24,15 @@ public class Account{
         this.balance = new BigDecimal(0);
     }
 
+    public Account(UUID id, Currency currency, Instant created, long lastChanged, User user, BigDecimal balance) {
+        this.id = id;
+        this.currency = currency;
+        this.created = created;
+        this.lastChanged = lastChanged;
+        this.user = user;
+        this.balance = balance;
+    }
+
     public Account(Account account) {
         this.id = account.id;
         this.currency = account.currency;
@@ -70,6 +79,10 @@ public class Account{
 
     public void updateLastChanged() {
         lastChanged++;
+    }
+
+    public long getLastChanged() {
+        return lastChanged;
     }
 
     public boolean isChangedAfter(Account acc) {

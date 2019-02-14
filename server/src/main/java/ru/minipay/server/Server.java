@@ -64,6 +64,9 @@ public class Server implements Runnable {
     private String process(String requestStr) {
         String result;
         try {
+            if(requestStr == null) {
+                return jsonParser.writeValueAsString(new ErrorResponse(false, "Got null request"));
+            }
             Request request = jsonParser.readValue(requestStr, Request.class);
             Response response;
             if(request instanceof FundTransferRequest) {
@@ -74,7 +77,11 @@ public class Server implements Runnable {
             } else if(request instanceof CreateAccountRequest) {
                 CreateAccountRequest createAccountRequest = jsonParser.readValue(requestStr, CreateAccountRequest.class);
                 Account acc = application.createTestAccount(); //TODO: create real accounts here
-                response = new CreateAccountResponse(true, acc.getId(), "");
+                if(acc == null) {
+                    response = new  CreateAccountResponse(false, null, "Cannot create account. Got null account.");
+                } else {
+                    response = new CreateAccountResponse(true, acc.getId(), "");
+                }
             } else if(request instanceof GetBalanceRequest) {
                 GetBalanceRequest getBalanceRequest = jsonParser.readValue(requestStr, GetBalanceRequest.class);
                 Account acc = application.getAccount(getBalanceRequest.getAccId());
@@ -85,11 +92,6 @@ public class Server implements Runnable {
             result = jsonParser.writeValueAsString(response);
         } catch (IOException e) {
             result = e.getMessage();
-        }
-        try {
-            Thread.sleep(1); //TODO: for tests - remove later
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         return result;
     }
