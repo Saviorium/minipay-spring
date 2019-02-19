@@ -15,7 +15,7 @@ import java.net.Socket;
 
 public class Server implements Runnable {
     private final MinipayApplication application =
-            MinipayApplicationFactory.getInstance().createApplication();
+            MinipayApplicationFactory.getInstance().createPostgresApplication();
     private final ObjectMapper jsonParser = new ObjectMapper()
             .registerModule(new JavaTimeModule());
     private Thread thread;

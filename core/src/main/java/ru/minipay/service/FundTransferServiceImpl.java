@@ -1,20 +1,25 @@
 package ru.minipay.service;
 
 import ru.minipay.dao.AccountDao;
+import ru.minipay.dao.TransactionDao;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.api.FundTransferResponse;
+import ru.minipay.model.Transaction;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
 public class FundTransferServiceImpl implements FundTransferService{
-    private final AccountDao dao;
+    private final AccountDao accountDao;
+    private final TransactionDao transactionDao;
     private final FundExchangeService exchangeService;
 
-    public FundTransferServiceImpl(AccountDao dao, FundExchangeService exchangeService) {
-        this.dao = dao;
+    public FundTransferServiceImpl(AccountDao accountDao, TransactionDao transactionDao, FundExchangeService exchangeService) {
+        this.accountDao = accountDao;
+        this.transactionDao = transactionDao;
         this.exchangeService = exchangeService;
     }
 
@@ -23,8 +28,8 @@ public class FundTransferServiceImpl implements FundTransferService{
         if(fromId.equals(toId)) {
             return new FundTransferResponse(false, "From and To accounts are the same");
         }
-        Account from = dao.getById(fromId);
-        Account to = dao.getById(toId);
+        Account from = accountDao.getById(fromId);
+        Account to = accountDao.getById(toId);
         if(from == null || to == null) {
             return new FundTransferResponse(false, "User not found");
         }
@@ -34,7 +39,7 @@ public class FundTransferServiceImpl implements FundTransferService{
         }
         from.setBalance(from.getBalance().subtract(amountFromInCurrency));
         try {
-            dao.insert(from);
+            accountDao.insert(from);
         } catch (ConcurrentModificationException e) {
             return new FundTransferResponse(false, "Collision while trying to modify from balance");
         }
@@ -42,19 +47,20 @@ public class FundTransferServiceImpl implements FundTransferService{
         BigDecimal amountToInCurrency = exchangeService.exchange(amount, currency, to.getCurrency());
         to.setBalance(to.getBalance().add(amountToInCurrency));
         try {
-            dao.insert(to);
+            accountDao.insert(to);
         } catch (Exception e) { //TODO: handle DB exceptions properly
             //try to return funds
-            dao.getById(fromId);
+            accountDao.getById(fromId);
             from.setBalance(from.getBalance().add(amountFromInCurrency));
             try {
-                dao.insert(from); //FIXME: can fail too if DB is dead
+                accountDao.insert(from); //FIXME: can fail too if DB is dead
                 return new FundTransferResponse(false, "Collision while trying to modify from balance. Funds returned to from balance");
             } catch (ConcurrentModificationException ex) {
                 return new FundTransferResponse(false, "Funds are subtracted from " + fromId + " but didn't returned!");
                 //throw new IllegalStateException("Funds are subtracted from " + fromId + " but didn't returned!");
             }
         }
+        transactionDao.insert(new Transaction(fromId, toId, currency, amount, Instant.now()));
         return new FundTransferResponse(true,
                 "Sent " + amount + " from " + fromId + "(" + from.getBalance() + ")"
                         + " to " + toId + "(" + to.getBalance());

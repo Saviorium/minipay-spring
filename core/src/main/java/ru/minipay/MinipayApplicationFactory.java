@@ -1,9 +1,7 @@
 package ru.minipay;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import ru.minipay.dao.AccountDao;
-import ru.minipay.dao.AccountDaoDbImpl;
-import ru.minipay.dao.AccountDaoInMemoryImpl;
+import ru.minipay.dao.*;
 import ru.minipay.api.Currency;
 import ru.minipay.service.FundExchangeService;
 import ru.minipay.service.FundExchangeServiceLocalImpl;
@@ -24,18 +22,30 @@ public class MinipayApplicationFactory {
     }
 
     public MinipayApplication createApplication() {
-        //AccountDao dao = new AccountDaoInMemoryImpl();
-        AccountDao dao = getDbAccountDao();
-        UserAccountsService userAccountsService = new UserAccountsService(dao);
+        AccountDao accountDao = new AccountDaoInMemoryImpl();
+        TransactionDao transactionDao = new TransactionDaoInMemoryImpl();
+        UserAccountsService userAccountsService = new UserAccountsService(accountDao);
 
         FundExchangeService exchangeService = getExchangeService();
 
-        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(dao, exchangeService));
+        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(accountDao, transactionDao, exchangeService));
     }
 
-    private AccountDao getDbAccountDao() {
-        BasicDataSource ds = new BasicDataSource();
+    public MinipayApplication createPostgresApplication() {
+        BasicDataSource ds = getPostgresDataSource();
 
+        AccountDao accountDao = new AccountDaoDbImpl(ds);
+        UserAccountsService userAccountsService = new UserAccountsService(accountDao);
+
+        TransactionDao transactionDao = new TransactionDaoDbImpl(ds);
+
+        FundExchangeService exchangeService = getExchangeService();
+
+        return new MinipayApplication(userAccountsService, new FundTransferServiceImpl(accountDao, transactionDao, exchangeService));
+    }
+
+    private BasicDataSource getPostgresDataSource() {
+        BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
         ds.setUrl("jdbc:postgresql://localhost/minipay");
         ds.setUsername("minipay");
@@ -43,8 +53,7 @@ public class MinipayApplicationFactory {
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
-
-        return new AccountDaoDbImpl(ds);
+        return ds;
     }
 
     private FundExchangeService getExchangeService() {
