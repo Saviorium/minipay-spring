@@ -27,11 +27,11 @@ public class AccountDaoDbImpl implements AccountDao {
             boolean accountExists = result.getInt(1) == 1;
             if(accountExists) {
                 query = "UPDATE public.accounts " +
-                        "SET id=?, currency=?, created=?, last_changed=?, balance=?, first_name=?, last_name=?, gender=?, bithday=? " +
+                        "SET id=?, currency=?, created=?, last_changed=?, balance=?, first_name=?, last_name=?, gender=?, birthday=? " +
                         "WHERE id=?;";
             } else {
                 query = "INSERT INTO accounts(" +
-                        "id, currency, created, last_changed, balance, first_name, last_name, gender, bithday) " +
+                        "id, currency, created, last_changed, balance, first_name, last_name, gender, birthday) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
             }
             statement = conn.prepareStatement(query);
