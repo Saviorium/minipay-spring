@@ -48,7 +48,7 @@ public class TransactionDaoDbImpl implements TransactionDao {
                 Transaction txn = new Transaction(
                         results.getObject(1, UUID.class),
                         results.getObject(2, UUID.class),
-                        Currency.RUB, // FIXME: hardcoded currency
+                        Currency.valueOf(results.getString(3)),
                         results.getBigDecimal(4),
                         results.getTimestamp(5).toInstant()
                 );

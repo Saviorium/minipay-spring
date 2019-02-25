@@ -42,7 +42,7 @@ public class AccountDaoDbImpl implements AccountDao {
             statement.setObject(5, account.getBalance());
             statement.setString(6, account.getUser().getFirstName());
             statement.setString(7, account.getUser().getLastName());
-            statement.setInt(8, account.getUser().getGender() == Gender.MALE?0:1);
+            statement.setInt(8, account.getUser().getGender().getId());
             statement.setObject(9, account.getUser().getBirthday());
             if(accountExists) {
                 statement.setObject(10, account.getId());
@@ -65,10 +65,10 @@ public class AccountDaoDbImpl implements AccountDao {
                 User user = new User(
                         result.getString(6),
                         result.getString(7),
-                        result.getInt(8) == 0 ? Gender.MALE : Gender.FEMALE,
+                        Gender.getById(result.getInt(8)),
                         result.getDate(9).toLocalDate()
                 );
-                return new Account(id, Currency.RUB /*TODO: del*/, result.getTimestamp(3).toInstant(),
+                return new Account(id, Currency.valueOf(result.getString(2)), result.getTimestamp(3).toInstant(),
                         result.getLong(4), user, result.getBigDecimal(5));
             } else return null;
         } catch (SQLException e) {
