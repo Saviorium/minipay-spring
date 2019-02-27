@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ClientServerIntegrationTest {
-    private static final Server server = new Server();
+    private static final Server server = new ServerThreadPool();
     private static final String serverIP = "127.0.0.1";
 
     @BeforeClass

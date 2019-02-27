@@ -3,6 +3,7 @@ package ru.minipay.dao;
 import ru.minipay.model.Account;
 
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -24,6 +25,13 @@ public class AccountDaoInMemoryImpl implements AccountDao {
             if(!accountRef.compareAndSet(oldAcc, newAcc)) {
                 throw new ConcurrentModificationException("Error: account update collision");
             }
+        }
+    }
+
+    @Override
+    public void insert(List<Account> accounts) {
+        for (Account acc : accounts) {
+            insert(acc);
         }
     }
 
