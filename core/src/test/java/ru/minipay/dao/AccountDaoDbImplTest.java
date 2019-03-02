@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.minipay.api.Currency;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.model.Gender;
 import ru.minipay.model.SampleAccountGenerator;
@@ -33,7 +34,7 @@ public class AccountDaoDbImplTest {
     }
 
     @Test
-    public void testAccountInsert() {
+    public void testAccountInsert() throws DataAccessException {
         Account acc = new Account(new User("Имя", "Фамилия", Gender.FEMALE, LocalDate.now()), Currency.EUR);
         accountDao.insert(acc);
         Account daoAcc = accountDao.getById(acc.getId());
@@ -44,7 +45,7 @@ public class AccountDaoDbImplTest {
     }
 
     @Test
-    public void testInMemMultipleInsert() {
+    public void testInMemMultipleInsert() throws DataAccessException {
         LinkedList<Account> accs = new LinkedList<>();
         final int accNum = 3;
         for (int i = 0; i < accNum; i++) {

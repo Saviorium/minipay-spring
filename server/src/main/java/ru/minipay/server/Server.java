@@ -1,5 +1,6 @@
 package ru.minipay.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -7,6 +8,7 @@ import org.apache.logging.log4j.*;
 import ru.minipay.MinipayApplication;
 import ru.minipay.MinipayApplicationFactory;
 import ru.minipay.api.*;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.*;
 
 import java.io.*;
@@ -91,7 +93,15 @@ public class Server implements Runnable {
             }
             result = jsonParser.writeValueAsString(response);
         } catch (IOException e) {
+            LogManager.getLogger().error("Got IOException parsing json or making json response", e);
             result = e.getMessage();
+        } catch (DataAccessException e) {
+            LogManager.getLogger().error("Got DataAccessException", e);
+            try {
+                result = jsonParser.writeValueAsString(new ErrorResponse(false, "Error accessing the database"));
+            } catch (JsonProcessingException e1) {
+                result = e.getMessage();
+            }
         }
         return result;
     }

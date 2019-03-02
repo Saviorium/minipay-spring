@@ -1,5 +1,6 @@
 package ru.minipay;
 
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.model.User;
@@ -24,11 +25,11 @@ public class MinipayApplication {
         this.userAccountsService = userAccountsService;
     }
 
-    public Account createAccount(User user, Currency currency, BigDecimal initBalance) {
+    public Account createAccount(User user, Currency currency, BigDecimal initBalance) throws DataAccessException {
         return this.userAccountsService.createAccount(user, currency, initBalance);
     }
 
-    public Account createTestAccount() { //TODO: delete me
+    public Account createTestAccount() throws DataAccessException { //TODO: delete me
         return createAccount(getTestUser(), Currency.RUB, BigDecimal.valueOf(100L));
     }
 
@@ -45,7 +46,7 @@ public class MinipayApplication {
         return fundTransferService.makeTransfer(fromAccId, toAccId, currency, amount);
     }
 
-    public Account getAccount(UUID accId) {
+    public Account getAccount(UUID accId) throws DataAccessException {
         return userAccountsService.getAccount(accId);
     }
 }

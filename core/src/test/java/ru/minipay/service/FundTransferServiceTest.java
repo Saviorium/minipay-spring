@@ -6,6 +6,7 @@ import ru.minipay.dao.AccountDao;
 import ru.minipay.dao.AccountDaoInMemoryImpl;
 import ru.minipay.dao.TransactionDao;
 import ru.minipay.dao.TransactionDaoInMemoryImpl;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.api.FundTransferResponse;
@@ -23,7 +24,7 @@ public class FundTransferServiceTest {
                     new FundExchangeServiceLocalImpl(ExchangeRateGenerator.getSampleExchangeRate()));
 
     @Test
-    public void checkMakeTransfer() {
+    public void checkMakeTransfer() throws DataAccessException {
         Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         accountDao.insert(acc1);
@@ -40,7 +41,7 @@ public class FundTransferServiceTest {
     }
 
     @Test
-    public void makeTransferToUnknownAccount() {
+    public void makeTransferToUnknownAccount() throws DataAccessException {
         Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         accountDao.insert(acc1);
@@ -52,7 +53,7 @@ public class FundTransferServiceTest {
     }
 
     @Test
-    public void transferWhenNotEnoughMoney() {
+    public void transferWhenNotEnoughMoney() throws DataAccessException {
         Account acc1 = accGen.getTestAccount(Currency.RUB);
         acc1.setBalance(100L);
         accountDao.insert(acc1);

@@ -3,6 +3,7 @@ package ru.minipay;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.model.SampleAccountGenerator;
@@ -21,7 +22,7 @@ public class MinipayApplicationTest {
     }
 
     @Test
-    public void checkCreateAccount() {
+    public void checkCreateAccount() throws DataAccessException {
         BigDecimal balance = new BigDecimal("100.01");
         Account acc = app.createAccount(accGen.getTestUser(), Currency.RUB, balance);
         Assert.assertNotNull(acc.getId());
@@ -29,7 +30,7 @@ public class MinipayApplicationTest {
     }
 
     @Test
-    public void checkMakeTransfer() {
+    public void checkMakeTransfer() throws DataAccessException {
         BigDecimal balance = new BigDecimal("999.99");
         Account acc1 = app.createAccount(accGen.getTestUser(), Currency.RUB, balance);
         Account acc2 = app.createAccount(accGen.getTestUser(), Currency.RUB, balance);

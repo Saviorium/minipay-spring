@@ -1,6 +1,7 @@
 package ru.minipay.service;
 
 import ru.minipay.dao.AccountDao;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.api.Currency;
 import ru.minipay.model.User;
@@ -15,14 +16,14 @@ public class UserAccountsService {
         this.dao = dao;
     }
 
-    public Account createAccount(User user, Currency currency, BigDecimal initBalance) {
+    public Account createAccount(User user, Currency currency, BigDecimal initBalance) throws DataAccessException {
         Account account = new Account(user, currency);
         account.setBalance(initBalance);
         dao.insert(account);
         return dao.getById(account.getId());
     }
 
-    public Account getAccount(UUID accId) {
+    public Account getAccount(UUID accId) throws DataAccessException {
         return dao.getById(accId);
     }
 }

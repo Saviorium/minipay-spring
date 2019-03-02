@@ -2,6 +2,7 @@ package ru.minipay.dao;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.minipay.exceptions.DataAccessException;
 import ru.minipay.model.Account;
 import ru.minipay.model.SampleAccountGenerator;
 
@@ -13,7 +14,7 @@ public class AccountDaoInMemoryImplTest {
     private static final SampleAccountGenerator accGen = SampleAccountGenerator.getInstance();
 
     @Test
-    public void testInMemMultipleInsert() {
+    public void testInMemMultipleInsert() throws DataAccessException {
         LinkedList<Account> accs = new LinkedList<>();
         final int accNum = 3;
         for (int i = 0; i < accNum; i++) {
