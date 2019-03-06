@@ -8,6 +8,7 @@ import ru.minipay.model.Gender;
 import ru.minipay.model.User;
 
 import java.sql.*;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,7 @@ public class AccountDaoDbImpl implements AccountDao {
 
     @Override
     public void insert(List<Account> accounts) throws DataAccessException {
+        accounts.sort(Comparator.comparing(Account::getId));
         try (Connection conn = ds.getConnection()){
             conn.setAutoCommit(false);
             try {
