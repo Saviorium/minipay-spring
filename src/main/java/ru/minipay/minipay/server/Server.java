@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import ru.minipay.minipay.MinipayApplication;
 import ru.minipay.minipay.api.*;
@@ -18,7 +16,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-@Component
+//@Component
 public class Server implements Runnable {
     @Autowired
     private MinipayApplication application;

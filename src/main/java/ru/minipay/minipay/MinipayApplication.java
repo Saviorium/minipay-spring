@@ -1,6 +1,8 @@
 package ru.minipay.minipay;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import ru.minipay.minipay.api.Currency;
@@ -18,7 +20,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SpringBootApplication
-public class MinipayApplication {
+public class MinipayApplication implements CommandLineRunner {
     private final FundTransferService fundTransferService;
     private final UserAccountsServiceImpl userAccountsService;
 
@@ -53,4 +55,10 @@ public class MinipayApplication {
         return userAccountsService.getAccount(accId);
     }
 
+    public static void main(String[] args) {
+        SpringApplication.run(MinipayApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {}
 }
